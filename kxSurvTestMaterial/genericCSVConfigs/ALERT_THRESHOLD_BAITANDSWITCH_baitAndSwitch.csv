@@ -26,7 +26,6 @@ BS20E:  sell side layerred + triggers on trades (trade time window start time te
 BS20F:  Negative Test for BSScenario5E,instrumentID=bsSym5;orderID=BAS*,instrumentID+trader,.alert.baitAndSwitch,5,350,2,4,350,2,99,90,0,0,0D00:00:10.000000000,4
 BS21A:  Trades Better Than Best Order Price (positive),instrumentID=BAS*;orderID=BAS*,instrumentID+trader,.alert.baitAndSwitch,4,450,4,2,50,2,9,49,0,0,0D00:15:00.000000000,3
 BS21B:  Trades Better Than Best Order Price (negative),instrumentID=BAS*;eventTimestamp<>*D21:38*;orderID=BAS*,instrumentID+trader,.alert.baitAndSwitch,4,450,4,2,50,2,20,5,0,0,0D00:15:00.000000000,0
-BS22:  CounterPartyEntityLevel Negative Test,instrumentID=BAS11;orderID=BAS*,instrumentID+trader,.alert.baitAndSwitch,4,450,4,2,50,2,20,5,0,0,0D00:15:00.000000000,0
 BS23:  New Trade Logic satisfied on 'Triggers on Cancelled Orders' Case,instrumentID=BAS1;orderID=BAS*,instrumentID+trader,.alert.baitAndSwitch,4,450,4,2,50,2,20,5,66,66,0D00:15:00.000000000,0
 BS24:  Orders&Trades cached long enough,instrumentID=bsSym6;orderID=BAS*,instrumentID,.alert.baitAndSwitch,4,450,4,2,50,2,30,5,75,75,0D00:30:00.000000000,0
 BS25A:  Latest orderID status used for order book counts only (positive),instrumentID=bsSym7;orderID=BAS*,instrumentID,.alert.baitAndSwitch,4,499,4,2,50,2,30,5,75,75,0D00:15:00.000000000,0

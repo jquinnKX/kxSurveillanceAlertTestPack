@@ -20,7 +20,7 @@
 		<index>0</index>
 		<element>descriptionForUser</element>
 		<elementType>Symbol</elementType>
-		<elementValue>this is where csvs of dxOrder/Trade etc. data are.  Leave blank to take from:  (getenv`DELTA_HOME),"/packages/kxsurveillanceunittestpackage/kxSurveillanceUnitTestPackMaterial/refineryTestData"</elementValue>
+		<elementValue>this is where csvs of dxOrder/Trade etc. data are.  Leave blank to take from:  (getenv`DELTA_HOME),"/packages/kxSurveillanceAlertTestPack/kxSurvTestPack/refineryTestData"</elementValue>
 	</param>
 	<param>
 		<index>1</index>
