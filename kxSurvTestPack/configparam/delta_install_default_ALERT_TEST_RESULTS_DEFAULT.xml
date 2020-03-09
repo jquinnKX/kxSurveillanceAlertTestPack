@@ -12964,4 +12964,34 @@
 		<elementType>Date</elementType>
 		<elementValue>2015.04.20</elementValue>
 	</param>
+	<param>
+		<index>432</index>
+		<element>alert</element>
+		<elementType>Symbol</elementType>
+		<elementValue>baitAndSwitch</elementValue>
+	</param>
+	<param>
+		<index>432</index>
+		<element>alertInstance</element>
+		<elementType>Symbol</elementType>
+		<elementValue>BS26: Corportate Bond Example</elementValue>
+	</param>
+	<param>
+		<index>432</index>
+		<element>shouldTrigger</element>
+		<elementType>Long</elementType>
+		<elementValue>0</elementValue>
+	</param>
+	<param>
+		<index>432</index>
+		<element>shouldReissue</element>
+		<elementType>Long</elementType>
+		<elementValue>0</elementValue>
+	</param>
+	<param>
+		<index>432</index>
+		<element>dt</element>
+		<elementType>Date</elementType>
+		<elementValue>2015.05.01</elementValue>
+	</param>
 </configparam>

@@ -1,20 +1,20 @@
 instance,filters,entityLevel,alertFunction,thresholdLayerOrderCount,thresholdLayerOrderQuantity,thresholdLayerOrderPriceStep,thresholdOppositeOrderCount,thresholdOppositeOrderQuantity,thresholdOppositeOrderPriceStep,thresholdOppositeTradeQuantity,thresholdOppTradeQtyPercentage,thresholdCancelOrderQtyPercentage,thresholdCancelOrderCountPercentage,layerOrderTimeInterval,baitAndSwitchAlertReissueCount
-BS1:  Alert Triggers,instrumentID<>bsSym*|BAS*;orderID=BAS*,instrumentID,.alert.baitAndSwitch,4,450,4,2,50,2,30,5,75,75,0D00:15:00.000000000,0
-BS2:  Entity Level Test,instrumentID<>bsSym*|BAS*;orderID=BAS*,instrumentID+trader,.alert.baitAndSwitch,4,450,4,2,50,2,30,5,75,75,0D00:15:00.000000000,0
-BS3:  Filters Test #1,trader<>REF_FDTRADER2;instrumentID<>bsSym*|BAS*;orderID=BAS*,instrumentID+trader,.alert.baitAndSwitch,4,450,4,2,50,2,30,5,75,75,0D00:15:00.000000000,0
-BS4:  Filters Test #2,trader=REF_FDTRADER2;instrumentID<>bsSym*|BAS*;orderID=BAS*,instrumentID+trader,.alert.baitAndSwitch,4,450,4,2,50,2,30,5,75,75,0D00:15:00.000000000,0
-BS5:  Layered Side Order Count Threshold Test,instrumentID<>bsSym*|BAS*;orderID=BAS*,instrumentID+trader,.alert.baitAndSwitch,6,450,4,2,50,2,30,5,75,75,0D00:15:00.000000000,0
-BS6:  Layered Side Order Qty Threshold Test,instrumentID<>bsSym*|BAS*;orderID=BAS*,instrumentID+trader,.alert.baitAndSwitch,4,550,4,2,50,2,30,5,75,75,0D00:15:00.000000000,0
-BS7:  Layered Side Order Price Step Threshold Test,instrumentID<>bsSym*|BAS*;orderID=BAS*,instrumentID+trader,.alert.baitAndSwitch,4,450,6,2,50,2,30,5,75,75,0D00:15:00.000000000,0
-BS8:  Cancel Order Count Percentage Test #1,instrumentID<>bsSym*|BAS*;orderID=BAS*,instrumentID+trader,.alert.baitAndSwitch,4,450,4,2,50,2,30,5,85,75,0D00:15:00.000000000,0
-BS9:  Cancel Order Count Percentage Test #2,instrumentID<>bsSym*|BAS*;orderID=BAS*,instrumentID+trader,.alert.baitAndSwitch,4,450,4,2,50,2,30,5,15,15,0D00:15:00.000000000,0
-BS10:  Reissue Count Test,instrumentID<>bsSym*|BAS*;orderID=BAS*,instrumentID+trader,.alert.baitAndSwitch,4,450,4,2,50,2,30,5,15,15,0D00:15:00.000000000,1
-BS11:  Alerts triggers in Trigger on Trades case,instrumentID<>bsSym*|BAS*;orderID=BAS*,instrumentID+trader,.alert.baitAndSwitch,4,450,4,2,50,2,30,5,0,0,0D00:15:00.000000000,0
-BS12:  Trade Qty Threshold on opposite side test,instrumentID<>bsSym*|BAS*;orderID=BAS*,instrumentID+trader,.alert.baitAndSwitch,4,450,4,2,50,2,35,5,0,0,0D00:15:00.000000000,0
-BS13:  Layer Order Time Interval Test #1,instrumentID<>bsSym*|BAS*;orderID=BAS*,instrumentID+trader,.alert.baitAndSwitch,4,450,4,2,15,2,30,5,15,15,0D00:06:07.001000000,0
-BS14:  Layer Order Time Interval Test #2,instrumentID<>bsSym*|BAS*;orderID=BAS*,instrumentID+trader,.alert.baitAndSwitch,4,450,4,2,15,2,30,5,15,15,0D00:06:07.000000000,0
-BS15:  Layer Order Time Interval Test #3,instrumentID<>bsSym*|BAS*;orderID=BAS*,instrumentID+trader,.alert.baitAndSwitch,4,450,4,2,15,2,30,5,15,15,0D00:06:07.071000000,0
-BS16:  Layer Order Time Interval Test #4,instrumentID<>bsSym*|BAS*;orderID=BAS*,instrumentID+trader,.alert.baitAndSwitch,4,450,4,2,15,2,30,5,15,15,0D00:06:07.070000000,0
+BS1:  Alert Triggers,instrumentID<>bsSym*|BAS*|DEA*;orderID=BAS*,instrumentID,.alert.baitAndSwitch,4,450,4,2,50,2,30,5,75,75,0D00:15:00.000000000,0
+BS2:  Entity Level Test,instrumentID<>bsSym*|BAS*|DEA*;orderID=BAS*,instrumentID+trader,.alert.baitAndSwitch,4,450,4,2,50,2,30,5,75,75,0D00:15:00.000000000,0
+BS3:  Filters Test #1,trader<>REF_FDTRADER2;instrumentID<>bsSym*|BAS*|DEA*;orderID=BAS*,instrumentID+trader,.alert.baitAndSwitch,4,450,4,2,50,2,30,5,75,75,0D00:15:00.000000000,0
+BS4:  Filters Test #2,trader=REF_FDTRADER2;instrumentID<>bsSym*|BAS*|DEA*;orderID=BAS*,instrumentID+trader,.alert.baitAndSwitch,4,450,4,2,50,2,30,5,75,75,0D00:15:00.000000000,0
+BS5:  Layered Side Order Count Threshold Test,instrumentID<>bsSym*|BAS*|DEA*;orderID=BAS*,instrumentID+trader,.alert.baitAndSwitch,6,450,4,2,50,2,30,5,75,75,0D00:15:00.000000000,0
+BS6:  Layered Side Order Qty Threshold Test,instrumentID<>bsSym*|BAS*|DEA*;orderID=BAS*,instrumentID+trader,.alert.baitAndSwitch,4,550,4,2,50,2,30,5,75,75,0D00:15:00.000000000,0
+BS7:  Layered Side Order Price Step Threshold Test,instrumentID<>bsSym*|BAS*|DEA*;orderID=BAS*,instrumentID+trader,.alert.baitAndSwitch,4,450,6,2,50,2,30,5,75,75,0D00:15:00.000000000,0
+BS8:  Cancel Order Count Percentage Test #1,instrumentID<>bsSym*|BAS*|DEA*;orderID=BAS*,instrumentID+trader,.alert.baitAndSwitch,4,450,4,2,50,2,30,5,85,75,0D00:15:00.000000000,0
+BS9:  Cancel Order Count Percentage Test #2,instrumentID<>bsSym*|BAS*|DEA*;orderID=BAS*,instrumentID+trader,.alert.baitAndSwitch,4,450,4,2,50,2,30,5,15,15,0D00:15:00.000000000,0
+BS10:  Reissue Count Test,instrumentID<>bsSym*|BAS*|DEA*;orderID=BAS*,instrumentID+trader,.alert.baitAndSwitch,4,450,4,2,50,2,30,5,15,15,0D00:15:00.000000000,1
+BS11:  Alerts triggers in Trigger on Trades case,instrumentID<>bsSym*|BAS*|DEA*;orderID=BAS*,instrumentID+trader,.alert.baitAndSwitch,4,450,4,2,50,2,30,5,0,0,0D00:15:00.000000000,0
+BS12:  Trade Qty Threshold on opposite side test,instrumentID<>bsSym*|BAS*|DEA*;orderID=BAS*,instrumentID+trader,.alert.baitAndSwitch,4,450,4,2,50,2,35,5,0,0,0D00:15:00.000000000,0
+BS13:  Layer Order Time Interval Test #1,instrumentID<>bsSym*|BAS*|DEA*;orderID=BAS*,instrumentID+trader,.alert.baitAndSwitch,4,450,4,2,15,2,30,5,15,15,0D00:06:07.001000000,0
+BS14:  Layer Order Time Interval Test #2,instrumentID<>bsSym*|BAS*|DEA*;orderID=BAS*,instrumentID+trader,.alert.baitAndSwitch,4,450,4,2,15,2,30,5,15,15,0D00:06:07.000000000,0
+BS15:  Layer Order Time Interval Test #3,instrumentID<>bsSym*|BAS*|DEA*;orderID=BAS*,instrumentID+trader,.alert.baitAndSwitch,4,450,4,2,15,2,30,5,15,15,0D00:06:07.071000000,0
+BS16:  Layer Order Time Interval Test #4,instrumentID<>bsSym*|BAS*|DEA*;orderID=BAS*,instrumentID+trader,.alert.baitAndSwitch,4,450,4,2,15,2,30,5,15,15,0D00:06:07.070000000,0
 BS17: buy side layered + opposite order count is 1,instrumentID=bsSym2;orderID=BAS*,instrumentID+trader,.alert.baitAndSwitch,5,1000,5,2,150,2,0,0,50,15,0D00:00:20.000000000,0
 BS18:  buy side layered + opposite order count is 2 (maxTime>minTime),instrumentID=bsSym3;orderID=BAS*,instrumentID+trader,.alert.baitAndSwitch,5,350,2,4,350,2,0,0,50,50,0D12:00:00.000000000,0
 BS19:  sell side layerred + opposite order count is 3 (maxTime<minTime),instrumentID=bsSym4;orderID=BAS*,instrumentID+trader,.alert.baitAndSwitch,5,350,2,4,350,2,0,0,80,80,0D12:00:00.000000000,0
@@ -31,3 +31,4 @@ BS23:  New Trade Logic satisfied on 'Triggers on Cancelled Orders' Case,instrume
 BS24:  Orders&Trades cached long enough,instrumentID=bsSym6;orderID=BAS*,instrumentID,.alert.baitAndSwitch,4,450,4,2,50,2,30,5,75,75,0D00:30:00.000000000,0
 BS25A:  Latest orderID status used for order book counts only (positive),instrumentID=bsSym7;orderID=BAS*,instrumentID,.alert.baitAndSwitch,4,499,4,2,50,2,30,5,75,75,0D00:15:00.000000000,0
 BS25B:  Latest orderID status used for order book counts only (negative),instrumentID=bsSym7;orderID=BAS*,instrumentID,.alert.baitAndSwitch,4,500,4,2,50,2,30,5,75,75,0D00:15:00.000000000,0
+BS26: Corportate Bond Example,instrumentID=DEA19P9C*,instrumentID+trader,.alert.baitAndSwitch,10,4400000,7,2,500000,2,145000,50,50,45,0D01:00:00.000000000,500
