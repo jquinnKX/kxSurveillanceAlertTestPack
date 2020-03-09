@@ -1,0 +1,16 @@
+<dataconnectiongroup>
+	<ucname>delta_install_default</ucname>
+	<grpid>surv_gw_unitTests</grpid>
+	<key>
+		<keyname>DBS</keyname>
+		<val>instance.surv_gw_unitTests,</val>
+	</key>
+	<key>
+		<keyname>CONN_SELECTOR</keyname>
+		<val>DEFAULT</val>
+	</key>
+	<key>
+		<keyname>PRIMARY</keyname>
+		<val>primary,</val>
+	</key>
+</dataconnectiongroup>

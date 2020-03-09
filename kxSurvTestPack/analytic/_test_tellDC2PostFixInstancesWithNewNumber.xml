@@ -1,0 +1,23 @@
+<analytic>
+	<analytic>.test.tellDC2PostFixInstancesWithNewNumber</analytic>
+	<code_text>{[]
+
+	.uc.userconfig:update elementValue:((rtrim each elementValue),\:.test.uniqueTestPostfixForAllInstances) from .uc.userconfig where override=`DEFAULT,any parameter like/: ("ALERT_THRESHOLD_*";"ALERT_BENCH_*"),element in `instance`relatedAlert`relatedBenchmark`relatedBenchmarkInstance`benchmarkInstance,not null `$elementValue;
+	.uc.userconfig:update elementValue:(elementValue,\:.test.uniqueTestPostfixForAllInstances) from .uc.userconfig where override=`DEFAULT,parameter=`ALERT_THRESHOLD_INSIDERTRADING,element=`unusualPriceMovementAlertInstanceName;
+	.uc.userconfig:update elementValue:(elementValue,\:.test.uniqueTestPostfixForAllInstances) from .uc.userconfig where override=`DEFAULT,parameter=`ALERT_THRESHOLD_ATTEMPTTOINSIDETRADE,element=`priceMovementAlertInstance;
+	.uc.userconfig:update elementValue:(elementValue,\:.test.uniqueTestPostfixForAllInstances) from .uc.userconfig where override=`DEFAULT,parameter=`ALERT_THRESHOLD_PAINTINGTHETAPE,element=`conditionalAlertInstance;	
+	
+}</code_text>
+	<description>Clears actiontracker and runs all reports for alert test cases. It then checks the results in actiontracker against an expected result.</description>
+	<dictionaryparams>0</dictionaryparams>
+	<typ>Analytic</typ>
+	<private>0</private>
+	<returntype></returntype>
+	<returndata></returndata>
+	<defaultconnection></defaultconnection>
+	<alias></alias>
+	<analytictype>polling</analytictype>
+	<returndescription></returndescription>
+	<analyticgroup>SurveillanceGW</analyticgroup>
+	<analyticgroup>kxSurveillanceAlertTests</analyticgroup>
+</analytic>

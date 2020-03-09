@@ -1,0 +1,341 @@
+<analytic>
+	<analytic>.test.testAllAlerts</analytic>
+	<code_text>{[ingestData;runAlerts;emails;version;onlyTestTheseAlerts]
+
+	/example call
+	/.test.testAllAlerts[0b;1b;"person@firstderivatives.com";`;`all]
+
+	/ingestData: boolean to indicate whether to load test files (whipe and replace existing data in HDB for that date)
+	/runAlerts: boolean on whether to run alerts or not
+	/emails: string with emails to send errors/results to (emails seperated by semi-colon).  NOT REQUIRED for script to run, you just won't get emails but can check status in log
+	/version: symbol to use settings in override of the ALERT_TEST_* configs (` will be DEFAULT)
+	/onlyTestTheseAlerts: list of symbol alert names to test only (`all for all of them)
+
+	if[or[not count onlyTestTheseAlerts;onlyTestTheseAlerts~`];:()];
+
+	if[10=type[onlyTestTheseAlerts];onlyTestTheseAlerts:`$","vs onlyTestTheseAlerts]; 
+	.debug.test.testAllAlerts:(`ingestData`runAlerts`emails`version`onlyTestTheseAlerts)!(ingestData;runAlerts;emails;version;onlyTestTheseAlerts);
+	/{key[x]set'value x}.debug.test.testAllAlerts
+
+	if[not[ingestData] and not[runAlerts];
+		.log.out[.z.h;".test.testAllAlerts";"nothing to do/new dashboard visit - exiting"];
+		'"Welcome - give me a sec"
+	];
+
+	.log.out[.z.h;".test.testAllAlerts";"started"];
+
+	.test.exitWithError:{.test.testAllAlertsRunning:0b;.test.updateStatus`$x;'x};
+	.test.exitWithoutError:{.test.testAllAlertsRunning:0b;.test.updateStatus x;};
+	.test.updateStatus:{`.test.testPackStatus upsert ([]time:count[x]#.z.P;status:x)};
+	.test.updateStatus`$"kicked-off with params: ",-3!value .debug.test.testAllAlerts;	
+
+	if[.test.testAllAlertsRunning;
+		.log.err[.z.h;".test.testAllAlerts";"Test Pack Already Running"];
+		.test.updateStatus`$"Test Pack Already Running";
+		.test.exitWithError"Test Pack Already Running"
+	];
+	.test.testAllAlertsRunning:1b;
+
+	if[count .Q.pt;
+		.test.exitWithError"Error: This must be run in any non-HDB process."
+	];
+
+	.test.getSettingForItem:{string exec first setting from .uc.getActiveParamValue[`ALERT_TEST_SETTINGS;.test.version] where item=x};
+	
+	.test.origConsoleSettings:system"c";
+	system"c 1000 1000";
+
+	.test.startTime:.z.p;
+	.test.ingestData:ingestData;
+	.test.runAlerts:runAlerts;
+	.test.email:emails;
+	.test.version:version;
+	.test.onlyTestTheseAlerts:{$[(1=count x)and not 0&lt;=type x;enlist x;x]}onlyTestTheseAlerts;
+	
+	/dynamically determine a label for environment
+	.test.nameOfEnv:value .test.getSettingForItem`$"Command to get name of environment (run in GW)";
+	if[not count .test.nameOfEnv;.test.nameOfEnv:"DC host+port = ",string[.z.h],"+",string[.ex.prh({system"p"};`)];];
+	.test.numberOfErrorEmailsSentOutAlready:0; 
+
+	/determine alerts and reports to run
+	{
+
+		activeAlertsToTest:`$","vs .test.getSettingForItem`$"Alerts To Test";
+		if[first[.test.onlyTestTheseAlerts] in `all`batch;.test.onlyTestTheseAlerts:activeAlertsToTest];
+		/validAlerts:exec alertName from .uc.getActiveParamValue[`SURV_ALERTS;`];
+		validAlerts:distinct {.uc.getActiveParamValue[x[0];`][x[1]]}`$"+" vs .test.getSettingForItem`$"Config+Column with valid alert names";
+		
+		if[(count invalidAlerts:activeAlertsToTest except validAlerts)and .test.runAlerts;
+			.test.exitWithError"Error:  Following alerts listed in ALERT_TEST_SETTINGS are invalid: ",","sv string invalidAlerts
+		]; 
+
+		if[(count .test.onlyTestTheseAlerts except activeAlertsToTest) and .test.runAlerts;
+			.test.exitWithError"Error:  There are alerts in .test.onlyTestTheseAlerts that are not in ALERT_TEST_SETTINGS"
+		];
+		activeAlertsToTest:.test.onlyTestTheseAlerts inter activeAlertsToTest;
+
+		.test.activeAlertsToTest:activeAlertsToTest;
+		reports:$[first[.debug.test.testAllAlerts[`onlyTestTheseAlerts]]&lt;&gt;`batch;
+			exec (i+1)!report from select report by runSequence from .uc.getActiveParamValue[`ALERT_TEST_REPORTS;.test.version] where alert in activeAlertsToTest;
+			exec (i+1)!report from select report by runSequence from .uc.getActiveParamValue[`ALERT_TEST_REPORTS;.test.version] where alert=`batch
+		];
+		.test.reports:reports;			
+		.log.out[.z.h;".test.testAllAlerts";"defined reports"];
+		if[.test.runAlerts;
+			/check if reports are missing from test pack before running 
+			reportGen:@[.pl.gethostport;;{.log.error[.z.h;"Error getting port for Report Generator";x];:()}] `ds_report_generator_a; 
+			.log.out[.z.h;".test.testAllAlerts";"Connecting to Report Generator"];
+			.test.reportGenHandle: {.utils.dcc[x;0;{[x;y].pl.report_error_addInfo["Unable to open ",(string x);y];`$"Can't connect to report generator"}[x]]} reportGen;
+			.log.out[.z.h;".test.testAllAlerts";"Connected to Report Generator"];
+			
+			existingReportsInTestPack:.test.reportGenHandle({key .rpt.report};`);
+			
+			if[count missingReportsFromPack:(`$first each "-" vs' string raze reports)except existingReportsInTestPack;
+				.test.exitWithError"Missing the following report from test pack: ",", "sv string[missingReportsFromPack]
+			];
+		];
+		
+		.test.reportRunLoopDelay:"J"$.test.getSettingForItem`$"Delay Next Report Run It";
+
+		/prepare for case where 'Re-Run alerts that look for historical alerts' in ALERT_TEST_SETTINGS:&lt;DEFAULT&gt; is true
+
+		.test.rerunDependentAlertsAfterClosingHistoricalAlerts:`true=`$.test.getSettingForItem`$"Re-Run alerts that look for historical alerts";
+		.test.alertsThatDependOnHistoricaAlerts:(exec alert from .uc.getActiveParamValue[`ALERT_TEST_REPORTS;.test.version] where reportType like "*DependsOnHistoricalAlert")inter activeAlertsToTest;		
+		if[count .test.alertsThatDependOnHistoricaAlerts; 
+			.test.reportsForAlertsThatDependOnHistoricaAlerts:exec (i+1)!report from select report by runSequence from .uc.getActiveParamValue[`ALERT_TEST_REPORTS;.test.version] where alert in .test.alertsThatDependOnHistoricaAlerts;
+		];
+
+	}[];
+
+	/determine data requirements
+	{
+		.test.dataDir:`$.test.getSettingForItem`$"Data Folder";
+		if[null .test.dataDir;
+			.test.dataDir:`$(getenv`DELTA_HOME),"/packages/kxSurveillanceAlertTestPack/kxSurvTestMaterial/refineryTestData"
+		];
+		.test.refdataDir:`$.test.getSettingForItem`$"Flat File Reference Data Folder";	
+		.test.alertTestFiles:{x where not x like "*allTablesRowCountsByDate*"}1_`$system"find ",string .test.dataDir;
+		.test.alertTestFiles:.test.alertTestFiles where {any x like/:("*_",/:string[$[first[.debug.test.testAllAlerts[`onlyTestTheseAlerts]]=`batch;enlist`batch;.test.activeAlertsToTest]]),\:".csv"}each .test.alertTestFiles;
+		.test.validTableList:.ex.prh("exec distinct table from .tbl.tablecolumn");
+		
+		/get path of hdb
+		HDBPathEnvVar:.test.getSettingForItem`$"HDB Path Env Var";
+		.test.hdbpath:hsym `$getenv`$HDBPathEnvVar;
+		
+		HDB:@[.pl.gethostport;;{.log.error[.z.h;"Error getting port for Report Generator";x];:()}] .test.hdbProc:`$.test.getSettingForItem`$"refineryHDBProc"; 
+		.log.out[.z.h;".test.testAllAlerts";"Connecting to HDB"];
+		.test.HDBHandle: {.utils.dcc[x;0;{[x;y].pl.report_error_addInfo["Unable to open ",(string x);y];`err}[x]]} HDB;
+		.log.out[.z.h;".test.testAllAlerts";"Connected to HDB"];	
+		
+		if[null .test.hdbpath;
+			.test.hdbpath:hsym `$.test.HDBHandle({first system"pwd"};`);	
+		];		
+		 
+		.test.forceKillAfterIngestion:`true=`$.test.getSettingForItem`$"Force-kill HDBs after ingestion";
+		/.test.hdbsToKill:.ex.prh({exec taskName from .wf.getTaskSummaryForWF[`SURV_Master_Processes_A] where any taskName like/: ("surv_hdb_?_*";"surv_hdb_??_*")};`);		
+		.test.hdbsToKill:`;
+		.test.specificHDBsToKill:`$","vs .test.getSettingForItem`$"Specific HDBs to kill";
+		if[count .test.specificHDBsToKill;
+			/.test.hdbsToKill:.test.specificHDBsToKill inter .test.hdbsToKill;
+			.test.hdbsToKill:.test.specificHDBsToKill;
+			if[not count .test.hdbsToKill;
+				.log.out[.z.h;".test.testAllAlerts";"HDBs listed in 'Specific HDBs to kill' in ALERT_TEST_SETTINGS not hdbs in SURV_Master_Processes_A workflow"];
+			 	.test.forceKillAfterIngestion:0b;
+			 ];
+		];
+		
+		.test.checkForDataDifference:`true=`$.test.getSettingForItem`$"Check for Data Change";
+		
+	}[];
+
+	/mark as killed any alerts or benchmarks stuck in running from last time
+	/JAN 2020: no equivalent of engine master or dl master yet
+	target:`instance.surv_dl_master_a;
+	/catch:.[.ds.gw.query;(`targets`aggFunc`queryType!(target;`dexRazeData;`async);("update status:`killed from `.dataloader.alerts where status in`new`running"));`];
+	/catch:.[.ds.gw.query;(`targets`aggFunc`queryType!(target;`dexRazeData;`async);("update status:`killed from `.dataloader.benchmarks where status in`new`running"));`];
+	
+	/import threshold (if required) and append a unique post-fix onto alert instance names	
+	{	
+	if[.test.runAlerts;
+		haveToManuallyImportThresholdsFromCSV:`false=`$.test.getSettingForItem`$"Configs are in test pack";
+		if[haveToManuallyImportThresholdsFromCSV;
+			configFolderPath:.test.getSettingForItem`$"Config Folder";
+			if[null `$configFolderPath;
+				configFolderPath:(getenv`DELTA_HOME),"/packages/kxSurveillanceAlertTestPack/kxSurvTestMaterial/genericCSVConfigs"
+			]; 
+			paths:`$1_system"find ",configFolderPath; 			
+			$[not count .test.alertsThatDependOnHistoricaAlerts;
+				paths:paths where {any x like/:("*_",/:string[.test.activeAlertsToTest]),\:".csv"}each paths;
+				paths:paths where {any x like/:("*_",/:string[.test.activeAlertsToTest,`unusualTradePriceMovement`benchmarkManipulation`markingTheClose]),\:".csv"}each paths			
+			] ;
+			if[not count paths;
+				.test.exitWithError"No CSV configs for desired alerts to test: ",", "sv string .test.activeAlertsToTest
+			]; 
+			
+			.test.configNames:configNames:`$"_"sv/:3#'"_"vs/:last each "/"vs'string paths;
+			validAlertParameterNames:.ex.prh({exec distinct parameter from .uc.userconfig where any parameter like/: ("ALERT_BENCH_*";"ALERT_THRESHOLD_*")};`);
+			if[count invalidAlertParameterNames:configNames except validAlertParameterNames;
+				.test.exitWithError"Following csvs in ",configFolderPath," are not valid: ",","sv string invalidAlertParameterNames
+			];
+			/.test.importThresholdsFromCSV each paths;
+			@[.test.importThresholdsFromCSV;;{.test.exitWithError x}]each paths;  
+		];
+
+		/we append the postfix string "_12345" (i.e. a random 5-digit number) to all alert instance names everytime run test pack so that fresh new alertkeys are generated each time test pack runs meaning fresh dItemIDs not re-issues on top of older dItemIDs in action tracker 	
+		/if script killed half way through, alerts instances all already appended with _12345 so we remove those if that the case first before reappending new postfix
+		
+		configToCheck:`$"ALERT_THRESHOLD_",{$[x like "UNUSUALTRADEPRICEMOVEMENT";"UNUSUALTRADEPRICEMOV";x]}upper string first .test.activeAlertsToTest;
+		potentialLastAppend:-6#string exec first instance from .uc.getActiveParamValue[configToCheck;`];
+		
+		if[("_"=first potentialLastAppend)and not null "J"$potentialLastAppend[1 2 3 4 5];
+			lastAppend:potentialLastAppend;
+			.log.out[.z.h;".test.testAllAlerts";"found previous alert instance postfix - telling DC to remove it"]; 
+			.ex.prh(".test.uniqueTestPostfixForAllInstances:\"",lastAppend,"\";");
+			.ex.prh(".test.tellDC2ToRemovePostFixInInstances:value first exec code_text from .al.analytic where analytic = `.test.tellDC2ToRemovePostFixInInstances;");
+			.ex.prh(".test.tellDC2ToRemovePostFixInInstances[];");
+		];	
+	
+		.test.undochanges:1b;
+		.test.uniqueTestPostfixForAllInstances:"_",string["j"$.z.p][10 11 12 13 14];
+		.log.out[.z.h;".test.testAllAlerts";"telling DC to add new alert instance postfix"];
+		.ex.prh(".test.uniqueTestPostfixForAllInstances:\"",.test.uniqueTestPostfixForAllInstances,"\";");
+		.ex.prh(".test.tellDC2PostFixInstancesWithNewNumber:value first exec code_text from .al.analytic where analytic = `.test.tellDC2PostFixInstancesWithNewNumber;");
+		.ex.prh(".test.tellDC2PostFixInstancesWithNewNumber[];");
+		.log.out[.z.h;".test.testAllAlerts";"postfix added attempt 1"];
+		/define filter to pick out and check newly generated alerts only at end of pack run 
+		.test.actionTrackerFilter:{select from x where alertTime&gt;=.test.startTime,alertkey like ("*",.test.uniqueTestPostfixForAllInstances,";*")};
+
+		/read in expect alert results
+		.test.triggerTable:{select from x where alert in .test.activeAlertsToTest}{select from x where not or[alert=`disabled;alertInstance=`disabled]}update alertInstance:(`$string[alertInstance],\:.test.uniqueTestPostfixForAllInstances)from .uc.getActiveParamValue[`ALERT_TEST_RESULTS;.test.version];
+
+		/only get results if pack being run for sub-set of alerts
+		if[`onlyTestTheseAlerts in key .test;
+			.test.onlyTestTheseAlerts:{$[(1=count x)and not 0&lt;=type x;enlist x;x]}.test.onlyTestTheseAlerts;
+			.test.triggerTable:select from .test.triggerTable where alert in .test.onlyTestTheseAlerts; 
+		];
+		
+		/retry appending postfix if for anyreason it didn't work
+		system"sleep 4";
+		potentialLastAppend:-6#string exec first instance from .uc.getActiveParamValue[configToCheck;`];
+		if[not ("_"=first potentialLastAppend)and not null "J"$potentialLastAppend[1 2 3 4 5];
+			.log.out[.z.h;".test.testAllAlerts";"retrying postfix addition"];
+			.ex.prh(".test.tellDC2PostFixInstancesWithNewNumber[];");
+			.log.out[.z.h;".test.testAllAlerts";"postfix added attempt 2"];
+		];		
+	];
+	}[];
+	
+	/change any entries in configs or in-memory tables from what they are on fresh install
+		/{.uc.editActiveSingleParamData[x;`DEFAULT;update enabled:1b from .uc.getParamValue[x;`delta_install_default;`DEFAULT]]}`DS_FILEWATCHER_MATCHTABLE_DLSWITCH;
+		/.log.out[.z.h;".test.testAllAlerts";"changed config settings"];
+	
+		/target:`instance.surv_dl_master_a;
+		/catch:.ds.gw.query[`targets`queryType!(target;`sync);(".dl.lastSourceFileFinished:update enable:0b from .dl.lastSourceFileFinished;1b")];
+		/.log.out[.z.h;".test.testAllAlerts";"changed dispatcher settings"];
+	
+	$[ingestData;.test.state:0;.test.state:count .test.alertTestFiles];	
+
+	/*************************************************************************************
+	/do whatever specific to your project to ingest flat rerference data files in ALERT_TEST_SETTINGS:&lt;DEFAULT&gt; for item='Flat File Reference Data Folder' 
+	/************************************************************************************* 
+
+	refDataFolderPath:.test.getSettingForItem`$"Flat File Reference Data Folder";
+	if[count refDataFolderPath;
+		.test.alertTestRefDataTables:1_`$system"find ",refDataFolderPath;
+		.test.writeDownAlertTestRefDataTable each .test.alertTestRefDataTables;		
+		.Q.chk[.test.hdbpath];
+		/.dataloader.reloadHDB[`;`];
+		.test.HDBHandle({system"l ."};`);
+	];
+	
+	{
+		//FEB 2020: Tmp solution while alert batch framework being built
+
+		if[.test.systemAndCloneManagersHaveBeenSetUp:1b;		
+			survMaster:@[.pl.gethostport;;{.log.error[.z.h;"Error getting port for Engine Master";x];:()}] `surv_master_a; 
+			.test.survMasterHandle: @[{.utils.dcc[x;30000;{[x;y].pl.report_error_addInfo["Unable to open ",(string x);y];0Nj}[x]]};survMaster;0Nj];
+			if[null .test.survMasterHandle;
+				.test.exitWithError"Couldn't connect to Engine_Master - check status and retry."
+			];
+			.test.survMasterHandle"update maxNoOfClones:20 from `.surv.servWFs where instanceType=`replay";
+			.uc.editActiveSingleParamData[`SURV_SERVICE_CLASSES;`DEFAULT;update defaultNoOfServices:2 from .uc.getActiveParamValue[`SURV_SERVICE_CLASSES;`DEFAULT] where service=`surv_engine,instanceType=`replay];
+			.test.survMasterHandle"update defaultNoOfServices:2 from `.surv.servClasses where service=`surv_engine,instanceType=`replay";
+			
+			.test.lastPingTimeFromMasterEngine:.z.p;
+					
+			if[.test.runAlerts;
+				.test.batchesSnapshot:.test.survMasterHandle"update sentTime:.z.p from select from survBatches where instanceType=`replay";
+				.test.cloneSnapshot:.test.survMasterHandle"update sentTime:.z.p from select from masterServiceWFs where instanceType=`replay";				
+				
+				if[not all (exec distinct status from .test.batchesSnapshot) in `error`complete`finished`killed`failed`rejected`wfShutdown;
+					.test.exitWithError"Benchmarks or Alerts are already running - not proceeding."
+				];
+				if[count .test.cloneSnapshot;
+					.test.exitWithError"Replay Batch Clones are still up."
+				];				
+				.test.initialBatchesSnapshot:.test.batchesSnapshot;
+				.test.batchesSnapshot:0#.test.batchesSnapshot;
+				.test.cloneSnapshot:0#.test.cloneSnapshot;
+			];
+			.test.numberOfTimesRequestSentToSurvMaster:0;	
+		];
+	}[];
+
+	.d.prcl.removeFuncFromTimerByID exec first actID from .d.prcl.timerFunct where functName=`.test.testAllAlertsRETRY;
+	
+	.test.iAmOccupiedWritingDownData:0b;
+	.test.ihaveForceKilledHDBs:0b;	
+	.test.latestReportGroupStartTime:.z.p;
+	.d.prcl.addFunctToTimer[`.test.loadTestFilesWrapper;();"z"$.z.p+0D00:00:10.000;0Nz;5000;1b];
+	.log.out[.z.h;".test.testAllAlerts";"added .test.loadTestFiles to timer"];
+	.test.updateStatus`$"The report is running - alert instance add-on is ",.test.uniqueTestPostfixForAllInstances;	
+	:"The report is running. You can check progress by looking at the log of this process."
+ }</code_text>
+	<description>Checks for referencedata, ingests alert test data, and then runs benchmarks and alerts.</description>
+	<dictionaryparams>0</dictionaryparams>
+	<typ>Analytic</typ>
+	<private>0</private>
+	<returntype></returntype>
+	<returndata></returndata>
+	<defaultconnection></defaultconnection>
+	<alias></alias>
+	<analytictype>polling</analytictype>
+	<returndescription></returndescription>
+	<param>
+		<parameter>ingestData</parameter>
+		<default>false</default>
+		<description>If true, the report will ingest data.</description>
+		<required>1</required>
+		<datatype>Boolean</datatype>
+	</param>
+	<param>
+		<parameter>runAlerts</parameter>
+		<default>false</default>
+		<description>Will send an email to this address with results</description>
+		<required>1</required>
+		<datatype>Boolean</datatype>
+	</param>
+	<param>
+		<parameter>emails</parameter>
+		<default></default>
+		<description>default parameter</description>
+		<required>1</required>
+		<datatype>String</datatype>
+	</param>
+	<param>
+		<parameter>version</parameter>
+		<default></default>
+		<description>default parameter</description>
+		<required>1</required>
+		<datatype>Symbol</datatype>
+	</param>
+	<param>
+		<parameter>onlyTestTheseAlerts</parameter>
+		<default></default>
+		<description>default parameter</description>
+		<required>1</required>
+		<datatype>Symbol</datatype>
+	</param>
+	<analyticgroup>DxReportAnalytics</analyticgroup>
+	<analyticgroup>kxSurveillanceAlertTests</analyticgroup>
+</analytic>

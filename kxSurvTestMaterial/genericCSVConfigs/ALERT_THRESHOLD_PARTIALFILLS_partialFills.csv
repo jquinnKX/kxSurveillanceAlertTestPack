@@ -1,0 +1,7 @@
+instance,filters,entityLevel,fillPercentageThreshold,fillTimeWindowThreshold,fillLeniencyPercentageThreshold,alertFunction
+PF1: Alert Triggers,,sym+traderID,15.0,00:01:00.000000000,50.0,.alert.partialFills
+PF2: Filters Test,venue<>A*X,sym+traderID,15.0,00:01:00.000000000,50.0,.alert.partialFills
+PF3: Fill Percentage Threshold Test,,sym+traderID,14.0,00:01:00.000000000,50.0,.alert.partialFills
+PF4: Fill Time Window Threshold Test 1,,sym+traderID,15.0,00:00:40.000000000,50.0,.alert.partialFills
+PF5: Fill Time Window Threshold Test 2,,sym+traderID,15.0,00:00:30.000000000,50.0,.alert.partialFills
+PF6: Fill Leniency Percentage Threshold,,sym+traderID,15.0,00:01:00.000000000,200.0,.alert.partialFills

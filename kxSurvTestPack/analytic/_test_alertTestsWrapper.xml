@@ -1,0 +1,24 @@
+<analytic>
+	<analytic>.test.alertTestsWrapper</analytic>
+	<code_text>{[reports]
+	@[.test.alertTests;reports;{.log.err[.z.h;".test.alertTests had error: ";x];.test.sendErrorEmail[x]}]
+}</code_text>
+	<description>Clears actiontracker and runs all reports for alert test cases. It then checks the results in actiontracker against an expected result.</description>
+	<dictionaryparams>0</dictionaryparams>
+	<typ>Analytic</typ>
+	<private>0</private>
+	<returntype></returntype>
+	<returndata></returndata>
+	<defaultconnection></defaultconnection>
+	<alias></alias>
+	<analytictype>polling</analytictype>
+	<returndescription></returndescription>
+	<param>
+		<parameter>reports</parameter>
+		<default></default>
+		<description>default parameter</description>
+		<required>1</required>
+		<datatype>Symbol</datatype>
+	</param>
+	<analyticgroup>kxSurveillanceAlertTests</analyticgroup>
+</analytic>

@@ -1,0 +1,14 @@
+instance,filters,entityLevel,alertFunction,tradeTimeIntervalThreshold,numTradeInstancesThreshold,minTimeWindowThreshold,maxTimeWindowThreshold,orderQtyPctThreshold,tradeQtyThreshold,buySellMatchTimeWindow,minTradeValueThreshold
+PAT1: Alert Triggers,instrumentID<>onePair;orderID=PAT*,instrumentID+trader,.alert.preArrangedTrading,0D00:00:50.001000000,3,0D00:00:01.999000000,0D00:00:30.001000000,25,2000,0D00:00:05.001000000,0
+PAT2: Filters Test,instrumentID=PAT_sym;orderID=PAT*,instrumentID+trader,.alert.preArrangedTrading,0D00:00:50.001000000,3,0D00:00:01.999000000,0D00:00:30.001000000,25,2000,0D00:00:05.001000000,0
+PAT3: EntityLevel Test,instrumentID<>onePair;orderID=PAT*,instrumentID+executionID,.alert.preArrangedTrading,0D00:00:50.001000000,3,0D00:00:01.999000000,0D00:00:30.001000000,25,2000,0D00:00:05.001000000,0
+PAT4: Trade Time Interval Test,instrumentID<>onePair;orderID=PAT*,instrumentID+trader,.alert.preArrangedTrading,0D00:00:50.000000000,3,0D00:00:01.999000000,0D00:00:30.001000000,25,2000,0D00:00:05.001000000,0
+PAT5: Number of Trade Instances Threshold Test,instrumentID<>onePair;orderID=PAT*,instrumentID+trader,.alert.preArrangedTrading,0D00:00:50.001000000,4,0D00:00:01.999000000,0D00:00:30.001000000,25,2000,0D00:00:05.001000000,0
+PAT6: Min Time Between Orders Test,instrumentID<>onePair;orderID=PAT*,instrumentID+trader,.alert.preArrangedTrading,0D00:00:50.001000000,3,0D00:00:02.000000000,0D00:00:30.001000000,25,2000,0D00:00:05.001000000,0
+PAT7: Max Time Between Orders Test,instrumentID<>onePair;orderID=PAT*,instrumentID+trader,.alert.preArrangedTrading,0D00:00:50.001000000,3,0D00:00:01.999000000,0D00:00:30.000000000,25,2000,0D00:00:05.001000000,0
+PAT8: Order Qty % Threshold Test,instrumentID<>onePair;orderID=PAT*,instrumentID+trader,.alert.preArrangedTrading,0D00:00:50.001000000,3,0D00:00:01.999000000,0D00:00:30.001000000,20,2000,0D00:00:05.001000000,0
+PAT9: Trade Qty Threshold Test,instrumentID<>onePair;orderID=PAT*,instrumentID+trader,.alert.preArrangedTrading,0D00:00:50.001000000,3,0D00:00:01.999000000,0D00:00:30.001000000,25,2500,0D00:00:05.001000000,0
+PAT10: Max Time Between Trades,instrumentID<>onePair;orderID=PAT*,instrumentID+trader,.alert.preArrangedTrading,0D00:00:50.001000000,3,0D00:00:01.999000000,0D00:00:30.001000000,25,2000,0D00:00:05.000000000,0
+PAT11: Reissue Test,instrumentID<>onePair;orderID=PAT*,instrumentID+trader,.alert.preArrangedTrading,0D00:00:50.001000000,1,0D00:00:01.999000000,0D00:00:30.001000000,25,2000,0D00:00:05.001000000,0
+PAT14: Exits if no `new messages,eventType<>new;orderID=PAT*,instrumentID+trader,.alert.preArrangedTrading,0D00:00:50.001000000,3,0D00:00:01.999000000,0D00:00:30.001000000,25,2000,0D00:00:05.001000000,0
+PAT15: Order Time > Trade Time,instrumentID=onePair;orderID=PAT*,instrumentID+trader,.alert.preArrangedTrading,0D00:00:50.001000000,0,0D00:00:01.999000000,0D00:00:30.001000000,25,2000,0D00:00:05.001000000,0

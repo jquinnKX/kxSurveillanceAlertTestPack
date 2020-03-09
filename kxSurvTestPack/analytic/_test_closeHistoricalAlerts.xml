@@ -1,0 +1,38 @@
+<analytic>
+	<analytic>.test.closeHistoricalAlerts</analytic>
+	<code_text>{[]
+	.log.out[.z.h;"Closing and reassining selected historical alerts...";()];
+
+
+		/close a subset of historical alerts that cause single ATIT or PTT alert instances to trigger (so that single ATIT or PTT alert instance has to look in both AT RDB and AT HDB to find it's dependent alerts)
+		/No Insider Trading alerts intsance satisfy this, however all alerts for IT are looked for in one go so putting in a subset into AT HDB   
+		.ds.gw.query[`targets`aggFunc!(`gwat;`dexRazeData);(".ds.gw.query[`targets`aggFunc!(`at;`dexRazeData);(\"IDsAndATName:flip exec dItemID,actionName from dxATItemCurrent where open,(`$tag9) in `ATIT2ndSym`USM8_NORMALISED`EURUSD,alert in `unusualTradePriceMovement`benchmarkManipulation`markingTheClose;\")]")];
+		.ds.gw.query[`targets`aggFunc!(`gwat;`dexRazeData);(".ds.gw.query[`targets`aggFunc!(`at;`dexRazeData);(\".at.reassignAlerts[IDsAndATName]\")]")];
+			/additionally close ATIT, IT and PTT alerts and regenerate and check
+			.ds.gw.query[`targets`aggFunc!(`gwat;`dexRazeData);(".ds.gw.query[`targets`aggFunc!(`at;`dexRazeData);(\"IDsAndATName:flip exec dItemID,actionName from dxATItemCurrent where open,alert in `insiderTrading`attemptToInsideTrade`paintingTheTape;\")]")];
+			.ds.gw.query[`targets`aggFunc!(`gwat;`dexRazeData);(".ds.gw.query[`targets`aggFunc!(`at;`dexRazeData);(\".at.reassignAlerts[IDsAndATName]\")]")];
+			/additionally test if closed alerts sent to HDB are picked up correctly
+			.ds.gw.query[`targets`aggFunc!(`gwat;`dexRazeData);(".ds.gw.query[`targets`aggFunc!(`at;`dexRazeData);(\"dxATEOD[.z.d]\")]")];
+
+		/additionally test if closed alerts sitting in RDB are picked up correctly 	
+		.ds.gw.query[`targets`aggFunc!(`gwat;`dexRazeData);(".ds.gw.query[`targets`aggFunc!(`at;`dexRazeData);(\"IDsAndATName:flip exec dItemID,actionName from dxATItemCurrent where open,(`$tag9) in `elSym1`itSymWNews3`PTT_sym,alert in `unusualTradePriceMovement`benchmarkManipulation`markingTheClose;\")]")];
+		.ds.gw.query[`targets`aggFunc!(`gwat;`dexRazeData);(".ds.gw.query[`targets`aggFunc!(`at;`dexRazeData);(\".at.reassignAlerts[IDsAndATName]\")]")];
+
+		/additionally test if assigned alerts sitting in RDB are picked up correctly
+		.ds.gw.query[`targets`aggFunc!(`gwat;`dexRazeData);(".ds.gw.query[`targets`aggFunc!(`at;`dexRazeData);(\"IDsAndATName:flip exec dItemID,actionName from dxATItemCurrent where open,queue=`Surveillance.New,(`$tag9) in `dxNewsSym1`itPMSym`AUDCAD,alert in `unusualTradePriceMovement`benchmarkManipulation`markingTheClose;\")]")];
+		.ds.gw.query[`targets`aggFunc!(`gwat;`dexRazeData);(".ds.gw.query[`targets`aggFunc!(`at;`dexRazeData);(\"{dxATTransitionItem[x`dItemID;`$string[x`actionName],string[`.NewtoAssigned];`;0b;string[`closeInBatch];`]}each IDsAndATName\")]")];
+		
+ }</code_text>
+	<description>Clears actiontracker and runs all reports for alert test cases. It then checks the results in actiontracker against an expected result.</description>
+	<dictionaryparams>0</dictionaryparams>
+	<typ>Analytic</typ>
+	<private>0</private>
+	<returntype></returntype>
+	<returndata></returndata>
+	<defaultconnection></defaultconnection>
+	<alias></alias>
+	<analytictype>polling</analytictype>
+	<returndescription></returndescription>
+	<analyticgroup>SurveillanceGW</analyticgroup>
+	<analyticgroup>kxSurveillanceAlertTests</analyticgroup>
+</analytic>

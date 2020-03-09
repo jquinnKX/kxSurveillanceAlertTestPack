@@ -1,0 +1,23 @@
+<analyticgroup>
+	<name>kxSurveillanceUnitTests</name>
+	<parameter>ignore</parameter>
+	<analytic>.test.alertUnitTests</analytic>
+	<analytic>.test.alertUnitTestsWrapper</analytic>
+	<analytic>.test.closeHistoricalAlerts</analytic>
+	<analytic>.test.closeTheseAlerts</analytic>
+	<analytic>.test.exitWriteDownUnitTestFile</analytic>
+	<analytic>.test.importThresholdsFromCSV</analytic>
+	<analytic>.test.loadTestFiles</analytic>
+	<analytic>.test.loadTestFilesWrapper</analytic>
+	<analytic>.test.procInit</analytic>
+	<analytic>.test.replaceEmptyValues</analytic>
+	<analytic>.test.sendErrorEmail</analytic>
+	<analytic>.test.tellDC2PostFixInstancesWithNewNumber</analytic>
+	<analytic>.test.tellDC2ToRemovePostFixInInstances</analytic>
+	<analytic>.test.testAllAlerts</analytic>
+	<analytic>.test.testAllAlertsRETRY</analytic>
+	<analytic>.test.writeDownTRDataScopeFile</analytic>
+	<analytic>.test.writeDownUnitTestFile</analytic>
+	<analytic>.test.writeDownUnitTestRefDataTable</analytic>
+	<visibility>private</visibility>
+</analyticgroup>

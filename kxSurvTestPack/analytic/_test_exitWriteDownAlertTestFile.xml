@@ -1,0 +1,39 @@
+<analytic>
+	<analytic>.test.exitWriteDownAlertTestFile</analytic>
+	<code_text>{[filePath;reason]
+	
+	.log.out[.z.h;".test.exitWriteDownAlertTestFile";filePath];
+	.log.out[.z.h;".test.exitWriteDownAlertTestFile";reason];
+	.log.out[.z.h;".test.exitWriteDownAlertTestFile";"skipping this file"];
+
+	.test.sendEmail:{[email;reason].pl.sendemail[`to`sub`body!(enlist`$email;"[Automatic Alert Test - ",reason,"] ",.test.nameOfEnv," ",string[.test.version];"check gw log for details")]};
+	.test.sendEmail[;reason] each ";" vs .test.email;
+	.test.iAmOccupiedWritingDownData:0b;
+
+ }</code_text>
+	<description></description>
+	<dictionaryparams>0</dictionaryparams>
+	<typ>Analytic</typ>
+	<private>0</private>
+	<returntype></returntype>
+	<returndata></returndata>
+	<defaultconnection></defaultconnection>
+	<alias></alias>
+	<analytictype>polling</analytictype>
+	<returndescription></returndescription>
+	<param>
+		<parameter>filePath</parameter>
+		<default></default>
+		<description>default parameter</description>
+		<required>1</required>
+		<datatype>String</datatype>
+	</param>
+	<param>
+		<parameter>reason</parameter>
+		<default></default>
+		<description>default parameter</description>
+		<required>1</required>
+		<datatype>String</datatype>
+	</param>
+	<analyticgroup>kxSurveillanceAlertTests</analyticgroup>
+</analytic>

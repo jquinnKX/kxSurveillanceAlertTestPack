@@ -1,0 +1,10 @@
+instance,filters,entityLevel,alertFunction,orderCountThreshold,orderCountTimeInterval
+HOR0: Base Case,assetClass=EQUITY_EXCHANGE;instrumentID=FB.OQ;orderID=HOR*,instrumentID+trader,.alert.highOrderRate,6,0D00:00:25.000000000
+HOR1: filters,assetClass=EQUITY_EXCHANGE;instrumentID=FB.OQ;orderID=HOR*;side=S,instrumentID+trader,.alert.highOrderRate,6,0D00:00:25.000000000
+HOR2: entityLevel,assetClass=EQUITY_EXCHANGE;instrumentID=FB.OQ;orderID=HOR*,instrumentID+trader+side,.alert.highOrderRate,6,0D00:00:25.000000000
+HOR3: orderCountThreshold,assetClass=EQUITY_EXCHANGE;instrumentID=FB.OQ;orderID=HOR*,instrumentID+trader,.alert.highOrderRate,7,0D00:00:25.000000000
+HOR4: orderCountTimeInterval,assetClass=EQUITY_EXCHANGE;instrumentID=FB.OQ;orderID=HOR*,instrumentID+trader,.alert.highOrderRate,6,0D00:00:23.000000000
+HOR5: reissues,assetClass=EQUITY_EXCHANGE;instrumentID=FB.OQ;orderID=HOR*,instrumentID+trader,.alert.highOrderRate,4,0D00:00:20.000000000
+HOR6: Same eventTimestamp is differentiated,instrumentID=H*;trader=*FDTrader1*;orderID=HOR*,instrumentID+trader,.alert.highOrderRate,3,0D00:00:00.001000000
+HOR7: Order Count Time Interval Too short (comparison case),instrumentID=H*;trader=*FDTrader2*;orderID=HOR*,instrumentID+trader,.alert.highOrderRate,4,0D00:00:00.006100000
+HOR8: Order Count Time Interval Too short,instrumentID=H*;trader=*FDTrader2*;orderID=HOR*,instrumentID+trader,.alert.highOrderRate,4,0D00:00:00.006000000

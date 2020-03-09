@@ -1,0 +1,25 @@
+instance,filters,entityLevel,sampleTimePeriodDays,closeTimeInterval,thresholdCloseTradeQtyPercentage,minPriceCount,minAcceptableSampleDays,endOfMonthWeight,endOfMonthTimeInterval
+MTC1 (alert triggers),sourceData=BBG_TRADEBOOK,sym+traderID,21,00:15:00.000000000,20.0,30,20,1.01,5
+MTC2 (filters test),sourceData=BBG_TRADEBOOK;sym=XYZ-Jun2015,sym+traderID,21,00:15:00.000000000,20.0,30,20,1.01,5
+MTC3 (entityLevel test - adds per sym+traderID in same venue),sourceData=BBG_TRADEBOOK;sym=XYZ-Jun2015,sym+traderID+venue,21,00:15:00.000000000,20.0,30,20,1.01,5
+MTC4 (sampleTimePeriodDays test),sourceData=BBG_TRADEBOOK,sym+traderID,10,00:15:00.000000000,20.0,30,9,1.01,5
+MTC5 (closeTimeInterval Test - too long),sourceData=BBG_TRADEBOOK,sym+traderID,21,02:00:00.000000000,20.0,30,20,1.01,5
+MTC6 (thresholdCloseTradeQtyPercentage test - too high),sourceData=BBG_TRADEBOOK,sym+traderID,21,00:15:00.000000000,70.0,30,20,1.01,5
+MTC7 (minPriceCount and markingTheCloseScoreThreshold test),sourceData=BBG_TRADEBOOK,sym+traderID,21,00:15:00.000000000,20.0,200,4,1.01,5
+MTC8 (minPriceCount and markingTheCloseScoreThreshold test),sourceData=BBG_TRADEBOOK,sym+traderID,21,00:15:00.000000000,20.0,200,4,1.01,5
+MTC9 (endOfMonthWeight test),sourceData=BBG_TRADEBOOK,sym+traderID,21,00:15:00.000000000,20.0,30,20,1.25,5
+MTC10 (endOfMonthWeight and closingTradePercentageThreshold test),sourceData=BBG_TRADEBOOK,sym+traderID,21,00:15:00.000000000,20.0,30,20,1.25,5
+MTC11 (endOfMonthTimeInterval),sourceData=BBG_TRADEBOOK,sym+traderID,21,00:15:00.000000000,20.0,30,20,1.01,10
+MTC12: PaintingTheTape Dependent Alert,sourceData=BBG_TRADEBOOK;sym=PTT_sym,sym+traderID,5,00:15:00.000000000,20.0,1,1,1.0,5
+MTC13 (alert triggers),sourceData=TT*|PRT*,sym+traderID,21,00:15:00.000000000,20.0,30,20,1.01,5
+MTC14 (filters test),sourceData=TT*|PRT*;sym=1HGH8,sym+traderID,21,00:15:00.000000000,20.0,30,20,1.01,5
+MTC15 (entityLevel test - adds per sym+traderID in same venue),sourceData=TT*|PRT*,sym+traderID+venue,21,00:15:00.000000000,20.0,30,20,1.01,5
+MTC16 (sampleTimePeriodDays test),sourceData=TT*|PRT*,sym+traderID,10,00:15:00.000000000,20.0,30,9,1.01,5
+MTC17 (closeTimeInterval Test - too long),sourceData=TT*|PRT*,sym+traderID,21,02:00:00.000000000,20.0,30,20,1.01,5
+MTC18 (thresholdCloseTradeQtyPercentage test - too high),sourceData=TT*|PRT*,sym+traderID,21,00:15:00.000000000,70.0,30,20,1.01,5
+MTC19 (minPriceCount and markingTheCloseScoreThreshold test),sourceData=TT*|PRT*,sym+traderID,21,00:15:00.000000000,20.0,200,4,1.01,5
+MTC20 (minPriceCount and markingTheCloseScoreThreshold test),sourceData=TT*|PRT*,sym+traderID,21,00:15:00.000000000,20.0,200,4,1.01,5
+MTC21 (endOfMonthWeight test),sourceData=TT*|PRT*,sym+traderID,21,00:15:00.000000000,20.0,30,20,1.25,5
+MTC22 (endOfMonthWeight and closingTradePercentageThreshold test),sourceData=TT*|PRT*,sym+traderID,21,00:15:00.000000000,20.0,30,20,1.25,5
+MTC23 (endOfMonthTimeInterval),sourceData=TT*|PRT*,sym+traderID,21,00:15:00.000000000,20.0,30,20,1.01,10
+MTC24: PaintingTheTape Dependent Alert,sourceData=TT*|PRT*;sym=1HGH8,sym+traderID,5,00:15:00.000000000,20.0,1,1,1.0,5

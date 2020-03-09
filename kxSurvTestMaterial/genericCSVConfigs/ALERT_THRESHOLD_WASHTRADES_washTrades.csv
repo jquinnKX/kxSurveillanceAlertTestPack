@@ -1,0 +1,9 @@
+instance,filters,entityLevel,alertFunction,washTradeTimeInterval,thresholdTotalTradeQty,thresholdVWAPDifferencePercentage,thresholdNetTradeQtyPercentage
+Wash Trades 1: Alert Triggers,assetClass=EQ*_7|EQ*_8;executionID=WT*,instrumentID+trader+assetClass,.alert.washTrades,0D00:00:04.000000000,50000,0.03,0.05
+Wash Trades 2: Filters Test,instrumentID=AAPL;executionID=WT*,instrumentID+trader+assetClass,.alert.washTrades,0D00:00:01.000000000,50000,0.02,0.3
+Wash Trades 3: No Buys,side<>B;executionID=WT*,instrumentID+assetClass,.alert.washTrades,0D00:00:04.000000000,50000,0.03,0.05
+Wash Trades 4: No Sells,side<>S;executionID=WT*,instrumentID+assetClass,.alert.washTrades,0D00:00:01.000000000,50000,0.02,0.03
+Wash Trades 5: washTradeTimeInterval too short,instrumentID<>EURUSD;executionID=WT*,instrumentID+trader+assetClass,.alert.washTrades,0D00:00:03.000000000,50000,0.03,0.05
+Wash Trades 6: totalTradeQtyThreshold too high,instrumentID<>EURUSD;executionID=WT*,instrumentID+trader+assetClass,.alert.washTrades,0D00:00:04.000000000,50912,0.03,0.05
+Wash Trades 7: VWAPDifference%Threshold too low,instrumentID<>EURUSD;executionID=WT*,instrumentID+trader+assetClass,.alert.washTrades,0D00:00:04.000000000,50000,0.02,0.05
+Wash Trades 8: netTradeQtyDifference%Threshold too low,assetClass=EQ*_7|EQ*_8;executionID=WT*,instrumentID+trader+assetClass,.alert.washTrades,0D00:00:04.000000000,50000,0.03,0.04

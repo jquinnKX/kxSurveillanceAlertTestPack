@@ -1,0 +1,16 @@
+instance,filters,entityLevel,alertFunction,lookBackInterval,thresholdCancelQty,thresholdCancelCount,thresholdOrderLifetime
+SPG0: Base Case,instrumentID=KO.N;orderID=SPG*,instrumentID+trader,.alert.spoofing,0D00:00:26.000000000,46,2,0D00:00:35.000000000
+SPG1: filters,instrumentID=KO.N;orderID=SPG*;eventTimestamp=*D14:34*,instrumentID+trader,.alert.spoofing,0D00:00:26.000000000,46,2,0D00:00:35.000000000
+SPG2: entityLevel,instrumentID=KO.N;orderID=SPG*,instrumentID+trader+side,.alert.spoofing,0D00:00:26.000000000,46,2,0D00:00:35.000000000
+SPG3: lookBackInterval,instrumentID=KO.N;orderID=SPG*,instrumentID+trader,.alert.spoofing,0D00:00:11.000000000,46,2,0D00:00:35.000000000
+SPG4: thresholdCancelQty,instrumentID=KO.N;orderID=SPG*,instrumentID+trader,.alert.spoofing,0D00:00:26.000000000,58,2,0D00:00:35.000000000
+SPG5: thresholdCancelCount,instrumentID=KO.N;orderID=SPG*,instrumentID+trader,.alert.spoofing,0D00:00:26.000000000,46,3,0D00:00:35.000000000
+SPG6: thresholdOrderLifetime,instrumentID=KO.N;orderID=SPG*,instrumentID+trader,.alert.spoofing,0D00:00:26.000000000,46,2,0D00:00:20.000000000
+SPG7: time intervals too short (comparison case),instrumentID=XYZ_s*;orderID=SPG*,instrumentID+trader,.alert.spoofing,0D00:00:15.001000000,4000,3,0D00:00:15.001000000
+SPG8: lookbackInterval too short Test 1,instrumentID=XYZ_s*;orderID=SPG*,instrumentID+trader,.alert.spoofing,0D00:00:15.000000000,4000,3,0D00:00:15.001000000
+SPG9: thresholdOrderLifetime too short,instrumentID=XYZ_s*;orderID=SPG*,instrumentID+trader,.alert.spoofing,0D00:00:15.001000000,4000,3,0D00:00:15.000000000
+SPG10: production example,instrumentID=prod*;orderID=SPG*,instrumentID+trader,.alert.spoofing,0D00:10:00.000000000,5,1,0D00:10:00.000000000
+SPG11: time intervals too short (comparison case 2),instrumentID=XYZ_s*;orderID=SPG*,instrumentID+trader,.alert.spoofing,0D00:00:15.000000001,4000,3,0D00:00:15.001000000
+SPG12: leavesQty Test - entity partially fills then cancels,instrumentID=XYZ_LQTest;orderID=SPG*,instrumentID,.alert.spoofing,0D00:05:00.000000000,28999,0,0D00:05:00.000000000
+SPG13: leavesQty Test - entity partially fills then cancels,instrumentID=XYZ_LQTest;orderID=SPG*,instrumentID,.alert.spoofing,0D00:05:00.000000000,29000,0,0D00:05:00.000000000
+SPG14: differentiates sequence when eventTimestamp same,instrumentID=XYZ_WJTest;orderID=SPG*,instrumentID,.alert.spoofing,0D00:05:00.000000000,50000,5,0D00:05:00.000000000

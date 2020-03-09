@@ -1,0 +1,33 @@
+<analytic>
+	<analytic>.test.closeTheseAlerts</analytic>
+	<code_text>{[dItemIDs]
+
+	/example use
+	/.at.closeTheseAlerts[exec dItemID from dxATItemCurrent where open,alert=`washTrades]
+	
+	exampleArgument:"exec dItemID from dxATItemCurrent where open,alert=`washTrades";
+
+	{
+		.pm.exas[`Administrator;(`dxATTransitionItem;x;0b;`KxSurv_AT_Base.CloseAlert1_Open;`;1b;"";`)]	
+	}each dItemIDs;
+
+}</code_text>
+	<description>Checks for referencedata, ingests alert test data, and then runs benchmarks and alerts.</description>
+	<dictionaryparams>0</dictionaryparams>
+	<typ>Analytic</typ>
+	<private>0</private>
+	<returntype></returntype>
+	<returndata></returndata>
+	<defaultconnection></defaultconnection>
+	<alias></alias>
+	<analytictype>polling</analytictype>
+	<returndescription></returndescription>
+	<param>
+		<parameter>dItemIDs</parameter>
+		<default>false</default>
+		<description>If true, the report will ingest data.</description>
+		<required>1</required>
+		<datatype>Boolean</datatype>
+	</param>
+	<analyticgroup>kxSurveillanceAlertTests</analyticgroup>
+</analytic>

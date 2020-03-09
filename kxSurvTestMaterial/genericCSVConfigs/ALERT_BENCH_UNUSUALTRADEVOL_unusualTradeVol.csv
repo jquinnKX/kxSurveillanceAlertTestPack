@@ -1,0 +1,3 @@
+instance,filters,entityLevel,tradeValueTradingDays,volumeMeasure
+UTV_BTest1,instrumentID=U*;eventType=new;executionID=UTV*,instrumentID,2,value
+UTV33:  volumeMeasure=qty test,instrumentID=U*;eventType=new;executionID=UTV*,instrumentID,2,qty

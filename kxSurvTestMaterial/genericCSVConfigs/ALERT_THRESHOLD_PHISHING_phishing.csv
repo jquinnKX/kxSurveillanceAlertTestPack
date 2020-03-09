@@ -1,0 +1,14 @@
+instance,filters,entityLevel,alertFunction,thresholdSmallOrderQtyDefault,smallOrderFillCheck,thresholdLargeOrderQtyDefault,smallOrderEntryTimeInterval,thresholdSmallOrderCount,relatedBenchmark
+phishing1,sourceData<>RMDX|EBSM|ION|S2BX,sym+venue,.alert.phishing,500,false,10000,00:02:00.000000000,4,
+phishing2,sourceData<>RMDX|EBSM|ION|S2BX,sym+traderID,.alert.phishing,500,false,10000,00:02:00.000000000,4,
+phishing3,assetClass=RATES_EXCH;sourceData<>RMDX|EBSM|ION|S2BX,sym+venue,.alert.phishing,500,false,10000,00:02:00.000000000,4,
+phishing4,sourceData<>RMDX|EBSM|ION|S2BX,sym+venue,.alert.phishing,500,false,10000,00:02:00.000000000,5,
+phishing5,sourceData<>RMDX|EBSM|ION|S2BX,sym+venue,.alert.phishing,450,false,10000,00:02:00.000000000,4,
+phishing6,sourceData<>RMDX|EBSM|ION|S2BX,sym+venue,.alert.phishing,500,false,70000,00:01:30.000000000,4,
+phishing7,sourceData<>RMDX|EBSM|ION|S2BX,sym+venue,.alert.phishing,500,false,10000,00:01:30.000000000,4,
+phishing8,sourceData<>RMDX|EBSM|ION|S2BX,sym+venue,.alert.phishing,500,false,10000,00:01:30.000000000,2,
+phishing9,sourceData<>RMDX|EBSM|ION|S2BX,sym+venue,.alert.phishing,500,true,10000,00:01:30.000000000,2,
+phishing10,sourceData<>RMDX|EBSM|ION|S2BX,sym+venue,.alert.phishing,500,true,10000,00:02:00.000000000,2,
+phishingBM1,sourceData<>RMDX|EBSM|ION|S2BX,sym+brokerID,.alert.phishing,100,false,100000,00:02:00.000000000,2,phishingBM1
+phishingBM1 Can Choose Benchmark Instance Test Alert Instance,sourceData<>RMDX|EBSM|ION|S2BX,sym+brokerID,.alert.phishing,100,false,100000,00:02:00.000000000,2,phishingBM1 Can Choose Benchmark Instance Test Bench Instance
+phishingBM1 Can Choose Benchmark Instance Negative Test,sourceData<>RMDX|EBSM|ION|S2BX,sym+brokerID,.alert.phishing,100,false,100000,00:02:00.000000000,2,

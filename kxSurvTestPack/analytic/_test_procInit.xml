@@ -1,0 +1,19 @@
+<analytic>
+	<analytic>.test.procInit</analytic>
+	<code_text>{[]
+	.test.testPackStatus:([]time:enlist[.z.P];status:enlist[`$string[.ex.getInstanceName[]]," started and ready"]);
+	.test.fails:([]alert:`symbol$();alertInstance:`symbol$();shouldTrigger:`long$();shouldReissue:`long$();dt:`date$();reissues:`long$();triggers:`long$());
+	.test.testAllAlertsRunning:0b;
+ }</code_text>
+	<description>Clears actiontracker and runs all reports for alert test cases. It then checks the results in actiontracker against an expected result.</description>
+	<dictionaryparams>0</dictionaryparams>
+	<typ>Analytic</typ>
+	<private>0</private>
+	<returntype></returntype>
+	<returndata></returndata>
+	<defaultconnection></defaultconnection>
+	<alias></alias>
+	<analytictype>polling</analytictype>
+	<returndescription></returndescription>
+	<analyticgroup>kxSurveillanceAlertTests</analyticgroup>
+</analytic>

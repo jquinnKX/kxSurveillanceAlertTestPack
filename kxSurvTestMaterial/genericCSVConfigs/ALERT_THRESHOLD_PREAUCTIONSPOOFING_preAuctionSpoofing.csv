@@ -1,0 +1,18 @@
+instance,filters,entityLevel,alertFunction,timeInterval,qtyThreshold,countThreshold,countPercentageThreshold
+PreAucSpoofingAlertTest1,brokerID=1,sym,.alert.preAuctionSpoofing,00:20:00.000000000,0,0,0.0
+PreAucSpoofingAlertTest2,brokerID=1,sym,.alert.preAuctionSpoofing,00:20:00.000000000,0,0,0.0
+PreAucSpoofingAlertTest3,brokerID=1,sym,.alert.preAuctionSpoofing,00:20:00.000000000,400,0,0.0
+PreAucSpoofingAlertTest4,brokerID=1,sym,.alert.preAuctionSpoofing,00:20:00.000000000,0,1,0.0
+PreAucSpoofingAlertTest5,brokerID=1,sym,.alert.preAuctionSpoofing,00:20:00.000000000,0,0,99.0
+PreAucSpoofingAlertTest6,brokerID=1;sym=USM6,sym,.alert.preAuctionSpoofing,00:20:00.000000000,0,0,0.0
+PreAucSpoofingAlertTest7,brokerID=1,sym+traderID,.alert.preAuctionSpoofing,00:20:00.000000000,0,0,0.0
+PAS8: Alert Triggers For Close Auction,sym=CNL*,sym+traderID,.alert.preAuctionSpoofing,00:02:00.001000000,200,2,20.0
+PAS9: Entity Level Test,sym=CNL*,sym+brokerID,.alert.preAuctionSpoofing,00:02:00.001000000,200,2,20.0
+PAS10: timeInterval tightness test 1,sym=CNL*,sym+traderID,.alert.preAuctionSpoofing,00:02:00.000000001,200,2,20.0
+PAS11: timeInterval tightness test 2,sym=CNL*,sym+traderID,.alert.preAuctionSpoofing,00:02:00.000000000,200,2,20.0
+PAS12: Alert Triggers For Replaced Orders,sym=RPLSym,sym+traderID,.alert.preAuctionSpoofing,00:02:00.001000000,200,2,20.0
+PAS13: Triggers For Replaced and Cancelled Test 1,sym=RPLCNLSym,sym+traderID,.alert.preAuctionSpoofing,00:02:00.001000000,200,2,20.0
+PAS14: Triggers For Replaced and Cancelled Test 2,sym=RPLCNLSym,sym+traderID,.alert.preAuctionSpoofing,00:02:00.001000000,301,0,0.0
+PAS15: Triggers For Replaced and Cancelled Test 3,sym=RPLCNLSym,sym+traderID,.alert.preAuctionSpoofing,00:02:00.001000000,0,3,0.0
+PAS16:  TR Qualifiers LSE Close Test,sym=LSE*,sym+traderID,.alert.preAuctionSpoofing,00:02:00.001000000,200,2,20.0
+PAS17:  TR Qualifiers LSE Close Time sym = XYZ Override Test,sym=XYZ*,sym+traderID,.alert.preAuctionSpoofing,02:00:00.001000000,200,2,20.0

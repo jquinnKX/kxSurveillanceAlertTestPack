@@ -1,0 +1,9 @@
+instance,filters,entityLevel,alertFunction,thresholdOrderCount,thresholdOrderQuantity,thresholdOrderToTradeCountPercent,thresholdOrderToTradeQtyPercent,startTime,endTime
+orderToTradeTest1,orderID=OTT*,instrumentID,.alert.orderToTrade,1,4999,199,149,0D00:00:00.000000000,0D23:59:59.999999999
+orderToTradeTest2,orderID=OTT*,instrumentID,.alert.orderToTrade,6,4999,199,149,0D00:00:00.000000000,0D23:59:59.999999999
+orderToTradeTest3,orderID=OTT*,instrumentID,.alert.orderToTrade,1,1499999,199,149,0D00:00:00.000000000,0D23:59:59.999999999
+orderToTradeTest4,orderID=OTT*,instrumentID,.alert.orderToTrade,1,4999,499,149,0D00:00:00.000000000,0D23:59:59.999999999
+orderToTradeTest5,orderID=OTT*,instrumentID,.alert.orderToTrade,1,4999,199,999,0D00:00:00.000000000,0D23:59:59.999999999
+orderToTradeTest6,orderID=OTT*,instrumentID,.alert.orderToTrade,1,4999,199,149,0D20:30:29.002000000,0D20:30:29.003000000
+orderToTradeTest7,instrumentID=USM6;orderID=OTT*,instrumentID,.alert.orderToTrade,1,4999,199,149,0D00:00:00.000000000,0D23:59:59.999999999
+orderToTradeTest8,orderID=OTT*,instrumentID+side,.alert.orderToTrade,1,4999,199,149,0D00:00:00.000000000,0D23:59:59.999999999

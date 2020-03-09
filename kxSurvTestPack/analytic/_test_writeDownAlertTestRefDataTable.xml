@@ -1,0 +1,49 @@
+<analytic>
+	<analytic>.test.writeDownAlertTestRefDataTable</analytic>
+	<code_text>{[filePath]
+	.debug.writeDownAlertTestRefDataTable:filePath;
+	filePath:string filePath;
+	
+	.log.out[.z.h;".test.writeDownAlertTestRefDataTable";"started for ",filePath];
+
+	unixConcatinatedCSV:system"cat ",filePath;
+	headers:`$","vs first unixConcatinatedCSV;	 
+	
+	tableToBePopulated:`$first "."vs last "/"vs filePath;
+	baseTableName:`$first "_"vs string[tableToBePopulated];
+	.tbl.gettable[baseTableName];
+	res:@[get;baseTableName;`tableDoesntExist];
+	if[res~`tableDoesntExist;.test.exitWriteDownAlertTestFile[filePath;"Table called ",string[baseTableName]," doesnt exist"];:()];	
+	
+	tableToBePopulated set get baseTableName; 
+	requiredMeta:([]c:headers;sequenceNumber:til[count[headers]])lj update thisColumnIsInTable:1b from meta tableToBePopulated;
+	columnsInCSVThatExistInTable:exec c from requiredMeta where thisColumnIsInTable;
+	columnPositionsInCSVThatExistInTable:exec sequenceNumber from requiredMeta where thisColumnIsInTable;
+	requiredCasts:exec t from {update t:"*" from x where t~'" "}update upper t from select from requiredMeta where thisColumnIsInTable;
+	acceptableDataFromCSV:{[csvRow;acceptablePositions;casts;colNames]colNames!casts$'(","vs csvRow)[acceptablePositions]}[;columnPositionsInCSVThatExistInTable;requiredCasts;columnsInCSVThatExistInTable]each 1_unixConcatinatedCSV;
+	 
+	colsOfTable:cols[baseTableName];
+	tableToBePopulated set get tableToBePopulated upsert .surv.replaceEmptyValues (get[baseTableName]) uj acceptableDataFromCSV;
+		
+	hsym[`$string[.test.hdbpath],"/",string[tableToBePopulated]]set get tableToBePopulated; 
+	
+ }</code_text>
+	<description></description>
+	<dictionaryparams>0</dictionaryparams>
+	<typ>Analytic</typ>
+	<private>0</private>
+	<returntype></returntype>
+	<returndata></returndata>
+	<defaultconnection></defaultconnection>
+	<alias></alias>
+	<analytictype>polling</analytictype>
+	<returndescription></returndescription>
+	<param>
+		<parameter>filePath</parameter>
+		<default></default>
+		<description>default parameter</description>
+		<required>1</required>
+		<datatype>Symbol</datatype>
+	</param>
+	<analyticgroup>kxSurveillanceAlertTests</analyticgroup>
+</analytic>

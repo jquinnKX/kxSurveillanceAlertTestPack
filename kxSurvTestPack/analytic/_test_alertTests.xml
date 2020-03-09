@@ -1,0 +1,256 @@
+<analytic>
+	<analytic>.test.alertTests</analytic>
+	<code_text>{[]
+
+	.log.out[.z.h;".test.alertTests";"Processing report group ",string[.test.state]," out of ",string[count .test.reports]," groups"];
+	
+	/JAN 2020: no equivalent of engine master or dl master yet
+	if[.test.systemAndCloneManagersHaveBeenSetUp;
+		{		
+			neg[.test.survMasterHandle]({neg[.z.w]({`.test.lastPingTimeFromMasterEngine set x};.z.p)};`);
+			if[0D00:10:00&lt;.z.p-.test.lastPingTimeFromMasterEngine;
+				.test.sendErrorEmail["surv_master not responding"];
+			];
+			neg[.test.survMasterHandle]({if[count runningTooLong:exec cloneID from survBatches where null endTime,not null startTime,.z.p&gt;startTime+0D00:15:00;.surv.master.stopWFClone[`replay;]each runningTooLong;];};`);
+
+			neg[.test.survMasterHandle]({neg[.z.w]({`.test.batchesSnapshot set x[0];`.test.cloneSnapshot set x[1]};(update sentTime:.z.p from select from survBatches where instanceType=`replay;update sentTime:.z.p from select from masterServiceWFs where instanceType=`replay))};`);	
+
+		}[];
+
+		if[(.test.state&gt;0) and (delete sentTime from .test.initialBatchesSnapshot)~delete sentTime from .test.batchesSnapshot;
+			.test.updateStatus`$"Waiting on Batches to be registered in survBatches on surv_master process";
+			:()		
+		];
+		
+		if[not count[alertsAndBenchmarks:select from .test.batchesSnapshot where sentTime&gt;.test.latestReportGroupStartTime];
+			if[.test.state&gt;0;
+				.test.numberOfTimesRequestSentToSurvMaster+:1;
+				if[.test.numberOfTimesRequestSentToSurvMaster=10;
+					.test.sendErrorEmail["surv_master not responding"];
+				];
+				.log.out[.z.h;".test.alertTests";"waiting on .test.batchesSnapshot from surv_master - exiting"];			
+				:()
+			]; 
+		];
+		
+		.test.lastBatchesSnapshot:.test.batchesSnapshot;
+		.test.lastCloneSnapshot:.test.cloneSnapshot;
+		
+		.test.batchesSnapshot:0#.test.batchesSnapshot;
+		/.test.cloneSnapshot:0#.test.cloneSnapshot;
+		
+		if[not all (exec distinct status from alertsAndBenchmarks) in `wfShutdown`error`complete`finished`killed`failed`rejected;
+			.log.out[.z.h;".test.alertTests";"benchmarks or alerts still running - exiting"];
+			:()
+		];
+		if[count .test.cloneSnapshot;
+			.log.out[.z.h;".test.alertTests";"clone services are still up - exiting"];
+			:()
+		];		
+		.log.out[.z.h;".test.alertTests";"Nothing currently running - proceeding"];
+		.test.numberOfTimesRequestSentToSurvMaster:0;
+	];
+	
+	if[(.test.state&lt;count .test.reports);
+		
+		/give extra time for HDB to reload to pick up new benchmarks
+		if[.test.reportRunLoopDelay&gt;0;
+			$[
+			not `delay in key .test;
+				[
+					.test.delay:1b;
+					.test.delayCount:1;
+					.log.out[.z.h;".test.alertTests";"Delaying next run, delayCount is ",string[.test.delayCount]," with ",string[.test.reportRunLoopDelay-.test.delayCount]," more delay(s) to go"];
+					:()
+				];
+			.test.delayCount&lt;.test.reportRunLoopDelay;
+				[
+					.test.delayCount+:1;
+					.log.out[.z.h;".test.alertTests";"Delaying next run, delayCount is ",string[.test.delayCount]," with ",string[.test.reportRunLoopDelay-.test.delayCount]," more delay(s) to go"];
+					:()
+				];				
+				delete delay from `.test
+			];
+		];
+		{
+			.log.out[.z.h;".test.alertTests";"Running next report group ",string[.test.state+1]," out of ",string[count .test.reports]," groups"];
+			.test.state+:1;
+			
+	    	/can incorporate production batch into alert auto test pack
+	    	/report to be named in format
+	    	/&lt;alert batch name&gt;-YYYYDDMM
+	    	/e.g. OTC_T_FX-20150611 listed in ALERT_TEST_REPORTS:&lt;DEFAULT&gt;
+	    	rpt:$[{(1=count x)and 0&gt;type x}.test.reports[.test.state];enlist .test.reports[.test.state];.test.reports[.test.state]];
+			res:"-" vs' string rpt;
+	    	res[;0]:`$res[;0];
+	    	res:@[res;where 2=count each res;@[;1;"D"$]];
+	    
+	    	{
+	    		.test.updateStatus`$"Running ",string[first x];
+		    	$[2=count x;
+		    		.test.dlMasterHandle(`.dataloader.runAlertReport;x 0;x 1);
+		    		.test.reportGenHandle(`.rpt.runReportInstance;first x)
+		    	]
+	    	}each res;
+	    	.test.latestReportGroupStartTime:.z.p;
+	    }[];
+		.log.out[.z.h;".test.alertTests";"Ran reports with .test.state=",string[.test.state],". Exiting."];	
+		:()
+	];
+
+	if[(not .test.reranDependentAlertsAfterClosingHistoricalAlerts) and (.test.state=count .test.reports);
+
+		if[0&lt;count replayClonsStillUp:.ex.prh({exec name from .pl.getRunningInformation[] where not null service,name like "*replay*"};`);
+			.log.out[.z.h;".test.alertTests";"Replay Clone Services still up: ",", " sv string replayClonsStillUp];
+			:()
+		];
+
+		{
+			.log.out[.z.h;".test.alertTests";"Finished running benchmarks and alerts (BEFORE closing alerts and Rerunning). Checking actiontracker."];
+			.test.updateStatus`$"Finished reports, checking results";
+			.test.actionTrackerResults:.test.actionTrackerFilter .test.actionTrackerGWHandle".ds.gw.query[`at;({select from dxATItemCurrent where open};`)]";
+			if[`onlyTestTheseAlerts in key .test;
+				.test.actionTrackerResults:select from .test.actionTrackerResults where alert in .test.onlyTestTheseAlerts;
+			];		
+			triggerTable:.test.triggerTable;		
+			$[count .test.actionTrackerResults;
+				alerts:.test.actionTrackerResults,'(uj/){enlist x}each exec data from .test.actionTrackerResults;
+				alerts:([]alert:enlist`;alertInstance:`;dt:0Nd;reissue:0Nj)
+			];		
+			if[first[.debug.test.testAllAlerts[`onlyTestTheseAlerts]]=`batch;
+				triggerTable:update dt:2019.12.31 from triggerTable;
+			];			
+			alerts:select sum reissue,triggers:count i by alert,alertInstance,dt from alerts where (alert,'dt) in (triggerTable[`alert],'triggerTable[`dt]);
+			compareTable:triggerTable lj `alertInstance`dt xkey alerts;
+			.test.compareTable:compareTable;
+			.test.wrongTriggerCount:0!select wrongTriggers:(string alertInstance) by alert from compareTable where ((not shouldTrigger=triggers) or not shouldReissue=reissue),alertInstance in triggerTable[`alertInstance];
+			.test.badTriggers:0!select shouldNotHaveTriggered:(string alertInstance) by alert from alerts where (not alertInstance in triggerTable[`alertInstance]);
+			.test.passedAlerts:select success: distinct alert from compareTable where shouldTrigger=triggers,shouldReissue=reissue,not alert in (.test.wrongTriggerCount[`alert],.test.badTriggers[`alert]);
+			
+			.test.reranDependentAlertsAfterClosingHistoricalAlerts:1b;
+			
+			.test.updateStatus`$"Results: PASSES = ",(", "sv string exec success from .test.passedAlerts);
+			.test.updateStatus`$"Results: FAILS = ",(", "sv string distinct .test.wrongTriggerCount[`alert],.test.badTriggers[`alert]);
+		}[];
+		
+		if[.test.rerunDependentAlertsAfterClosingHistoricalAlerts and count .test.alertsThatDependOnHistoricaAlerts;
+			.test.closeHistoricalAlerts[];
+			.test.reports:.test.reportsForAlertsThatDependOnHistoricaAlerts;
+			.test.state:0;
+			:()
+		];
+	];
+
+	if[.test.reranDependentAlertsAfterClosingHistoricalAlerts and (.test.state=count .test.reports);		
+
+		.log.out[.z.h;".test.alertTests";"Finished running benchmarks and alerts (AFTER closing alerts and Rerunning). Checking actiontracker."];
+
+		.test.state:0;
+		.d.prcl.removeFuncFromTimerByID exec first actID from .d.prcl.timerFunct where functName=`.test.alertTestsWrapper;
+
+		currConsoleSize:system"c";
+		system"c 80 200";
+		
+		$[.test.rerunDependentAlertsAfterClosingHistoricalAlerts and count .test.alertsThatDependOnHistoricaAlerts;
+			[
+				{
+				actionTrackerResultsAfterClosingAndRerunning:.test.actionTrackerFilter {select from x where alert in .test.alertsThatDependOnHistoricaAlerts}.ds.gw.query[`targets`aggFunc!(`gwat;`dexRazeData);(".ds.gw.query[`targets`aggFunc!(`at;`dexRazeData);(\"select from dxATItemCurrent where open\")]")];		
+				triggerTableAfterClosingAndRerunning:{select from x where alert in .test.alertsThatDependOnHistoricaAlerts}.test.triggerTable;
+				$[count actionTrackerResultsAfterClosingAndRerunning;
+					alertsAfterClosingAndRerunning:actionTrackerResultsAfterClosingAndRerunning,'(uj/){enlist x}each exec data from actionTrackerResultsAfterClosingAndRerunning;
+					alertsAfterClosingAndRerunning:([]alert:enlist`;alertInstance:`;dt:0Nd;reissue:0Nj)
+				];						
+				alertsAfterClosingAndRerunning:select sum reissue,triggers:count i by alert,alertInstance,dt from alertsAfterClosingAndRerunning where (alert,'dt) in (triggerTableAfterClosingAndRerunning[`alert],'triggerTableAfterClosingAndRerunning[`dt]);
+				compareTableAfterClosingAndRerunning:triggerTableAfterClosingAndRerunning lj `alertInstance`dt xkey alertsAfterClosingAndRerunning;
+				wrongTriggerCountAfterClosingAndRerunning:0!select wrongTriggersAfterClosingAndRerunning:(string alertInstance) by alert from compareTableAfterClosingAndRerunning where ((not shouldTrigger=triggers) or not shouldReissue=reissue),alertInstance in triggerTableAfterClosingAndRerunning[`alertInstance];
+				badTriggersAfterClosingAndRerunning:0!select shouldNotHaveTriggeredAfterClosingAndRerunning:(string alertInstance) by alert from alertsAfterClosingAndRerunning where (not alertInstance in triggerTableAfterClosingAndRerunning[`alertInstance]);
+				passedAlertsAfterClosingAndRerunning:select successAfterClosingAndRerunning: distinct alert from compareTableAfterClosingAndRerunning where shouldTrigger=triggers,shouldReissue=reissue,not alert in (wrongTriggerCountAfterClosingAndRerunning[`alert],badTriggersAfterClosingAndRerunning[`alert]);
+				.test.emailBody:$[(count wrongTriggerCountAfterClosingAndRerunning)+count badTriggersAfterClosingAndRerunning;
+					.Q.s[.test.passedAlerts]," \n",.Q.s[.test.wrongTriggerCount]," \n",.Q.s[.test.badTriggers]," \n\n***AFTER CLOSING AND RERUNNING***\n\n",.Q.s[passedAlertsAfterClosingAndRerunning]," \n",.Q.s[wrongTriggerCountAfterClosingAndRerunning]," \n",.Q.s[badTriggersAfterClosingAndRerunning];
+					.Q.s[.test.passedAlerts]," \n",.Q.s[.test.wrongTriggerCount]," \n",.Q.s[.test.badTriggers]," \n\n(dependent alerts passed after closing historical alerts and rerunning)\n\n"
+				];				
+				
+				}[];		
+			];
+			[
+				.test.emailBody:.Q.s[.test.passedAlerts]," \n",.Q.s[.test.wrongTriggerCount]," \n",.Q.s[.test.badTriggers];						
+			]
+		];
+			
+				
+		system"c "," "sv string currConsoleSize;
+		.log.out[.z.h;"Retrieved results. Sending email to ",.test.email;()];
+		$[`retried in key `.test;
+			.test.subject:"[Automatic Alert Test Results *RETRY*] ";
+			.test.subject:"[Automatic Alert Test Results] "
+		];
+		{
+			.test.emailBody:.test.emailBody," \n\n\nIngestion Time: ",.Q.s[string "t"$.test.ingestionEndTime-.test.startTime],"\n\n\nAlert Time: ",.Q.s[string "t"$.z.p-.test.ingestionEndTime],"\n\n\nPack Time: ",.Q.s[string "t"$.z.p-.test.startTime];
+			.test.sendEmail:{[email].pl.sendemail[`to`sub`body!(enlist`$email;.test.subject,.test.nameOfEnv," ",string[.test.version];.test.emailBody)]};
+			.test.sendEmail each ";" vs .test.email;
+		}[];
+
+		/always "close" new CR alerts generated since .test.startTime
+		/.ds.gw.query[`targets`aggFunc!(`gwat;`dexRazeData);({.ds.gw.query[`targets`aggFunc!(`at;`dexRazeData);({`dxATAlert set update sym:`hideUnitTestCaseCRAlerts from dxATAlert where actionTracker=`ControlRoom,time&gt;=x};x)]};.test.startTime)];
+		
+		system"sleep 5";
+	
+		/JAN 2020:  engine_replay not bounced after alerts run yet - can't retry as global caches still populated
+		.test.retried:1b;
+		$[count[.test.wrongTriggerCount]+count[.test.badTriggers];
+				$[not `retried in key `.test;
+					[
+						{
+							.test.onlyTestTheseAlerts:{$[1=count x;first x;x]} distinct (exec alert from .test.badTriggers),(exec alert from .test.wrongTriggerCount);
+							.log.out[.z.h;"RETRYING FAILED ALERTS ONE MORE TIME";.test.onlyTestTheseAlerts];
+							.test.retried:1b;							
+							.d.prcl.addFunctToTimer[`.test.testAllAlertsRETRY;(0b;1b;.test.email;.test.version;.test.onlyTestTheseAlerts);"z"$.z.p+0D00:00:10.000;0Nz;60000;1b];
+						}[];
+						:()
+					];
+						delete retried from `.test
+				];	
+					delete retried from `.test
+		];
+		.log.out[.z.h;".test.alertTests";"No fails or retried once - continuing with post script clean-up"]; 
+		
+	];
+	system"c "," "sv string .test.origConsoleSettings;	
+	if[(.test.state=0) and `undochanges in key .test;
+		if[.test.undochanges;
+			/undo temporary overwrites
+			.ex.prh(".test.tellDC2ToRemovePostFixInInstances:value first exec code_text from .al.analytic where analytic = `.test.tellDC2ToRemovePostFixInInstances;");
+			.ex.prh(".test.tellDC2ToRemovePostFixInInstances[];");
+			delete onlyTestTheseAlerts from `.test;
+		];
+	];		
+	
+	if[count @[system;"grep -rnw ",(getenv`DELTA_HOME),"/delta-data/DeltaControlData/logdir/*replay* -e ERROR.";()];
+		.test.updateStatus`$"There were ERRORs in *replay* services log files";
+	];
+	
+	if[count .test.fails:select from .test.compareTable where or[shouldTrigger&lt;&gt;triggers;shouldReissue&lt;&gt;reissue];
+		.test.updateStatus`$"See fails in panel below :(";	
+	];
+	
+	if[first[.debug.test.testAllAlerts[`onlyTestTheseAlerts]]=`all;
+		.test.testAllAlertsRunning:0b;
+		.test.testAllAlerts . value .debug.test.testAllAlerts,enlist[`onlyTestTheseAlerts]!enlist[`batch];
+	];			
+	
+	.log.out[.z.h;".test.alertTests";"*******************************TEST SCRIPT COMPLETE*******************************"];
+	.test.exitWithoutError`$"TEST SCRIPT COMPLETE";
+			
+ }</code_text>
+	<description>Clears actiontracker and runs all reports for alert test cases. It then checks the results in actiontracker against an expected result.</description>
+	<dictionaryparams>0</dictionaryparams>
+	<typ>Analytic</typ>
+	<private>0</private>
+	<returntype></returntype>
+	<returndata></returndata>
+	<defaultconnection></defaultconnection>
+	<alias></alias>
+	<analytictype>polling</analytictype>
+	<returndescription></returndescription>
+	<analyticgroup>kxSurveillanceAlertTests</analyticgroup>
+</analytic>

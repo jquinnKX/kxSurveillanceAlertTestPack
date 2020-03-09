@@ -1,0 +1,21 @@
+instance,parent,priority,relatedAlert,filters,entityLevel,alertFunction,orderEntityLevel,lookbackStartTimeThreshold
+top1,TRUE,999,top1,sym=USM6,sym+traderID,.alert.timeOrderPriority,sym,00:00:00.000
+top2,TRUE,999,top2,sym=USM7;venue=GCBOT,sym+traderID,.alert.timeOrderPriority,sym,00:00:00.000
+top3,TRUE,999,top3,sym=USM8,sym+brokerID+venue,.alert.timeOrderPriority,sym,00:00:00.000
+top4,TRUE,999,top4,sym=USM9;traderID=*FDTRADER445566,sym+brokerID+venue,.alert.timeOrderPriority,sym+orderType,00:00:00.000
+top5,TRUE,999,top5,sym=USM10,sym+traderID,.alert.timeOrderPriority,sym,00:00:00.000
+top6,TRUE,999,top6,venue=CMEX;traderID=*FDTRADER667788,sym+traderID,.alert.timeOrderPriority,sym,00:00:00.000
+top7,TRUE,999,top7,venue=FDEXC,sym+traderID,.alert.timeOrderPriority,sym,00:00:00.000
+top8,TRUE,999,top8,venue=FDEXC,sym+traderID,.alert.timeOrderPriority,sym+side,00:00:00.000
+top9,TRUE,999,top9,venue=FDEXCA,sym+traderID,.alert.timeOrderPriority,sym,00:00:00.000
+top10,TRUE,999,top10,venue=FDEXCB,sym+traderID,.alert.timeOrderPriority,sym,00:00:00.000
+top11,TRUE,999,top11,brokerID=FDBROKER,sym+traderID,.alert.timeOrderPriority,sym,00:00:00.000
+top12:  Triggers on parent instance with children Test - Parent,TRUE,999,top12:  Triggers on parent instance with children Test - Parent,venue=CMEX;traderID=*FDTRADER667788,sym+traderID,.alert.timeOrderPriority,sym,00:00:00.000
+top12:  Triggers on parent instance with children Test - Child1,FALSE,1,top12:  Triggers on parent instance with children Test - Parent,sourceData=doesNotExist,sym+traderID,.alert.timeOrderPriority,sym,00:00:00.000
+top12:  Triggers on parent instance with children Test - Child2,FALSE,2,top12:  Triggers on parent instance with children Test - Parent,sourceData=doesNotExist,sym+traderID,.alert.timeOrderPriority,sym,00:00:00.000
+top13:  Triggers on child Test - Parent,TRUE,999,top13:  Triggers on child Test - Parent,venue=CMEX;traderID=*FDTRADER667788,sym+traderID,.alert.timeOrderPriority,sym,00:00:00.000
+top13:  Triggers on child Test - Child1,FALSE,1,top13:  Triggers on child Test - Parent,sourceData<>doesNotExist,sym+traderID,.alert.timeOrderPriority,sym,00:00:00.000
+top13:  Triggers on child Test - Child2,FALSE,2,top13:  Triggers on child Test - Parent,sourceData<>doesNotExist,sym+traderID,.alert.timeOrderPriority,sym,00:00:00.000
+top14:  Triggers on child2 Test - Parent,TRUE,999,top14:  Triggers on child2 Test - Parent,venue=CMEX;traderID=*FDTRADER667788,sym+traderID,.alert.timeOrderPriority,sym,00:00:00.000
+top14:  Triggers on child2 Test - Child1,FALSE,1,top14:  Triggers on child2 Test - Parent,sourceData=doesNotExist,sym+traderID,.alert.timeOrderPriority,sym,00:00:00.000
+top14:  Triggers on child2 Test - Child2,FALSE,2,top14:  Triggers on child2 Test - Parent,sourceData<>doesNotExist,sym+traderID,.alert.timeOrderPriority,sym,00:00:00.000

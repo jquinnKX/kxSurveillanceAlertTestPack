@@ -1,0 +1,27 @@
+<analytic>
+	<analytic>.test.sendErrorEmail</analytic>
+	<code_text>{[error]
+	if[.test.numberOfErrorEmailsSentOutAlready&lt;10;
+		{[email;error].pl.sendemail[`to`sub`body!(enlist`$email;"[Automatic Alert Test ERROR] ",.test.nameOfEnv," ",string .test.version;.Q.s error)]}[;error] each ";" vs .test.email;
+		.test.numberOfErrorEmailsSentOutAlready+:1;
+	];
+}</code_text>
+	<description>Loads all the files needed for alert testing.</description>
+	<dictionaryparams>0</dictionaryparams>
+	<typ>Analytic</typ>
+	<private>0</private>
+	<returntype></returntype>
+	<returndata></returndata>
+	<defaultconnection></defaultconnection>
+	<alias></alias>
+	<analytictype>polling</analytictype>
+	<returndescription></returndescription>
+	<param>
+		<parameter>error</parameter>
+		<default></default>
+		<description>default parameter</description>
+		<required>1</required>
+		<datatype>String</datatype>
+	</param>
+	<analyticgroup>kxSurveillanceAlertTests</analyticgroup>
+</analytic>

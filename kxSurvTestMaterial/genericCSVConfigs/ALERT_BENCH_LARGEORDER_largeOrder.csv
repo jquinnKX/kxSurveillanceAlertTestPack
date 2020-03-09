@@ -1,0 +1,17 @@
+instance,filters,entityLevel,volumeMeasure,sampleTimePeriod,startTimeBucket,endTimeBucket,minNoSamples,winsorisationLowerThreshold,winsorisationUpperThreshold,method,methodParameter
+LO0: base case,instrumentID=LLOY.L|VOD.L;orderID=LO*,instrumentID,quantity,6,0D07:30:00.000000000,0D08:00:00.000000000,216,0,100,percentile,88
+LO1: filters,instrumentID=LLOY.L|VOD.L|BARC.L;orderID=LO*,instrumentID,quantity,6,0D07:30:00.000000000,0D08:00:00.000000000,216,0,100,percentile,88
+LO2: entityLevel,instrumentID=LLOY.L|VOD.L|BARC.L;orderID=LO*,instrumentID+side,quantity,6,0D07:30:00.000000000,0D08:00:00.000000000,216,0,100,percentile,88
+LO3: sampleTimePeriod,instrumentID=LLOY.L|VOD.L|BARC.L;orderID=LO*,instrumentID,quantity,5,0D07:30:00.000000000,0D08:00:00.000000000,216,0,100,percentile,88
+LO4: timeBuckets,instrumentID=LLOY.L|VOD.L|BARC.L;orderID=LO*,instrumentID,quantity,6,0D07:50:00.000000000,0D07:54:59.999999999,216,0,100,percentile,88
+LO4: timeBuckets,instrumentID=LLOY.L|VOD.L|BARC.L;orderID=LO*,instrumentID,quantity,6,0D07:55:00.000000000,0D08:00:00.000000000,216,0,100,percentile,88
+LO5: minNoSamples,instrumentID=LLOY.L|VOD.L|BARC.L;orderID=LO*,instrumentID,quantity,6,0D07:30:00.000000000,0D08:00:00.000000000,884,0,100,percentile,88
+LO6: winsorisation,instrumentID=LLOY.L|VOD.L|BARC.L;orderID=LO*,instrumentID,quantity,6,0D07:30:00.000000000,0D08:00:00.000000000,216,15,85,percentile,88
+LO7: methodParameter,instrumentID=LLOY.L|VOD.L|BARC.L;orderID=LO*,instrumentID,quantity,6,0D07:30:00.000000000,0D08:00:00.000000000,216,0,100,percentile,89
+LO8A: method,instrumentID=LLOY.L|VOD.L|BARC.L;orderID=LO*,instrumentID,quantity,6,0D07:30:00.000000000,0D08:00:00.000000000,216,0,100,logNormal,88
+LO8B: method,instrumentID=LLOY.L|VOD.L|BARC.L;orderID=LO*,instrumentID,quantity,6,0D07:30:00.000000000,0D08:00:00.000000000,216,15,85,logNormal,88
+LO8C: method,instrumentID=LLOY.L|VOD.L|BARC.L;orderID=LO*,instrumentID,quantity,6,0D07:30:00.000000000,0D08:00:00.000000000,216,0,100,powerMean,12
+LO8D: method,instrumentID=LLOY.L|VOD.L|BARC.L;orderID=LO*,instrumentID,quantity,6,0D07:30:00.000000000,0D08:00:00.000000000,216,15,85,powerMean,12
+LO9: volumeMeasure,instrumentID=LLOY.L|VOD.L|BARC.L;orderID=LO*,instrumentID,value,6,0D07:30:00.000000000,0D08:00:00.000000000,216,0,100,percentile,88
+LO10: default volume threshold,instrumentID=VOD.L;orderID=LO*,instrumentID,quantity,6,0D07:30:00.000000000,0D08:00:00.000000000,216,0,100,percentile,70
+LO12: thresholdPercentageOver,instrumentID=LLOY.L|VOD.L;orderID=LO*,instrumentID,quantity,6,0D07:30:00.000000000,0D08:00:00.000000000,216,0,100,percentile,88

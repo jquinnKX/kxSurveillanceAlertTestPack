@@ -1,0 +1,17 @@
+instance,filters,entityLevel,interval,priceMoveEntityLevel,sampleTimePeriod,startTimeBucket,endTimeBucket,minNoSamples,winsorisationLowerThreshold,winsorisationUpperThreshold,percentile,defaultTickSize
+UTPM1: Filters,eventType=new;executionID=UTPM*;instrumentID=LTCUSD,instrumentID,Trade To Trade: 00:01:00.000,instrumentID+side,6,0D00:00:00.000000000,0D23:59:59.999000000,1,0,100,99.5,0
+UTPM2: Entity Level,eventType=new;executionID=UTPM*;instrumentID=LTCUSD,instrumentID+trader,Trade To Trade: 00:01:00.000,instrumentID+side,6,0D00:00:00.000000000,0D23:59:59.999000000,1,0,100,99.5,0
+UTPM3: Sample Time Period,eventType=new;executionID=UTPM*;instrumentID=LTCUSD,instrumentID+trader,Trade To Trade: 00:01:00.000,instrumentID+side,5,0D00:00:00.000000000,0D23:59:59.999000000,1,0,100,99.5,0
+UTPM4: Interval,eventType=new;executionID=UTPM*;instrumentID=LTCUSD,instrumentID+trader,Trade To Trade: 00:00:10.000,instrumentID+side,6,0D00:00:00.000000000,0D23:59:59.999000000,1,0,100,99.5,0
+UTPM5: percentile,eventType=new;executionID=UTPM*;instrumentID=LTCUSD,instrumentID+trader,Trade To Trade: 00:01:00.000,instrumentID+side,6,0D00:00:00.000000000,0D23:59:59.999000000,1,0,100,97,0
+UTPM6: minNoSamples,eventType=new;executionID=UTPM*;instrumentID=LTCUSD,instrumentID+trader,Trade To Trade: 00:01:00.000,instrumentID+side,6,0D00:00:00.000000000,0D23:59:59.999000000,245,0,100,99.5,0
+UTPM7: winsorisation,eventType=new;executionID=UTPM*;instrumentID=LTCUSD,instrumentID+trader,Trade To Trade: 00:01:00.000,instrumentID+side,6,0D00:00:00.000000000,0D23:59:59.999000000,1,10,90,99.5,0
+UTPM8: defaultTickSize,eventType=new;executionID=UTPM*;instrumentID=LTCUSD,instrumentID+trader,Trade To Trade: 00:01:00.000,instrumentID+side,6,0D00:00:00.000000000,0D23:59:59.999000000,1,0,100,97,1.00E-07
+UTPM9: Benchmark Threshold for whole day,eventType=new;executionID=UTPM*,instrumentID+trader,Trade To Trade: 00:01:00.000,instrumentID+side,6,0D00:00:00.000000000,0D23:59:59.999999999,1,0,100,99,0
+UTPM10: Benchmark Threshold by half-hour,eventType=new;executionID=UTPM*,instrumentID+trader,Trade To Trade: 00:01:00.000,instrumentID+side,6,0D11:00:00.000000000,0D11:29:59.999999999,1,0,100,99,0
+UTPM10: Benchmark Threshold by half-hour,eventType=new;executionID=UTPM*,instrumentID+trader,Trade To Trade: 00:01:00.000,instrumentID+side,6,0D11:30:00.000000000,0D11:59:59.999999999,1,0,100,99,0
+UTPM10: Benchmark Threshold by half-hour,eventType=new;executionID=UTPM*,instrumentID+trader,Trade To Trade: 00:01:00.000,instrumentID+side,6,0D12:00:00.000000000,0D12:29:59.999999999,1,0,100,99,0
+UTPM10: Benchmark Threshold by half-hour,eventType=new;executionID=UTPM*,instrumentID+trader,Trade To Trade: 00:01:00.000,instrumentID+side,6,0D12:30:00.000000000,0D12:59:59.999999999,1,0,100,99,0
+UTPM11: Intraday test,eventType=new;executionID=UTPM*;instrumentID=LTCUSD,instrumentID+trader,Intraday: 00:12:00.000,instrumentID+side,6,0D00:00:00.000000000,0D23:59:59.999000000,1,0,100,99,0
+UTPM12: Interday test,eventType=new;executionID=UTPM*;instrumentID=LTCUSD,instrumentID+trader,Interday: 3,instrumentID+side,3,0D00:00:00.000000000,0D23:59:59.999000000,1,0,100,90,0
+UTPM13: Intraday Window High Low test,eventType=new;executionID=UTPM*;instrumentID=LTCUSD,instrumentID+trader,Intraday Window High Low: 00:00:50.000,instrumentID+side,6,0D00:00:00.000000000,0D23:59:59.999000000,1,0,100,99,0

@@ -1,0 +1,16 @@
+instance,filters,entityLevel,alertFunction,pingOrderTimeInterval,pingOrderCancellationTimeInterval,pingOrderQuantityDefaultThreshold,pingOrderCountThreshold,pingOrderPricePercentageThreshold,pingOrdersAlertReissueCount,relatedBenchmark
+PingT1,sourceData<>RMDX,sym,.alert.pingOrders,00:15:00.000000000,00:15:00.000000000,150,1,1.0,0,
+PingT2,sourceData<>RMDX,sym+traderID,.alert.pingOrders,00:15:00.000000000,00:15:00.000000000,150,1,1.0,0,
+PingT3,sourceData<>RMDX,sym+brokerID,.alert.pingOrders,00:15:00.000000000,00:15:00.000000000,150,1,1.0,0,
+PingT4,assetClass=COMM_EXCH;sourceData<>RMDX,sym,.alert.pingOrders,00:15:00.000000000,00:15:00.000000000,150,1,1.0,0,
+PingT5,assetClass=FX_EXCH;sourceData<>RMDX,sym,.alert.pingOrders,00:15:00.000000000,00:15:00.000000000,150,1,1.0,0,
+PingT6,assetClass=COMM_EXCH;sourceData<>RMDX,sym,.alert.pingOrders,00:00:05.000000000,00:15:00.000000000,150,1,1.0,0,
+PingT7,assetClass=COMM_EXCH;sourceData<>RMDX,sym,.alert.pingOrders,00:15:00.000000000,00:00:00.100000000,150,1,1.0,0,
+PingT8,assetClass=COMM_EXCH;sourceData<>RMDX,sym,.alert.pingOrders,00:15:00.000000000,00:15:00.000000000,10,1,1.0,0,
+PingT9,assetClass=COMM_EXCH;sourceData<>RMDX,sym,.alert.pingOrders,00:15:00.000000000,00:15:00.000000000,150,7,1.0,0,
+PingT10,assetClass=COMM_EXCH;sourceData<>RMDX,sym,.alert.pingOrders,00:15:00.000000000,00:15:00.000000000,150,1,80.0,0,
+PingT11,assetClass=COMM_EXCH;sourceData<>RMDX,sym,.alert.pingOrders,00:15:00.000000000,00:15:00.000000000,150,1,1.0,1,
+PingT12,assetClass=COMM_EXCH;sourceData<>RMDX,sym+traderID,.alert.pingOrders,00:15:00.000000000,00:15:00.000000000,70,1,1.0,0,PingT12
+PingT12 Can Choose Benchmark Instance Test Bench Instance,assetClass=COMM_EXCH;sourceData<>RMDX,sym+traderID,.alert.pingOrders,00:15:00.000000000,00:15:00.000000000,70,1,1.0,0,PingT12  Can Choose Benchmark Instance Test Bench Instance
+PingT12 Can Choose Benchmark Instance Negative Test,assetClass=COMM_EXCH;sourceData<>RMDX,sym+traderID,.alert.pingOrders,00:15:00.000000000,00:15:00.000000000,70,1,1.0,0,
+PingT13,sourceData<>RMDX,sym,.alert.pingOrders,02:15:00.000000000,02:15:00.000000000,150,1,1.0,0,

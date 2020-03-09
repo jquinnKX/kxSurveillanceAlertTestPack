@@ -1,0 +1,13 @@
+instance,filters,agencyEntityLevel,principalEntityLevel,alertFunction,minPrincipalTradedQty,minAgencyTradedQty,minPrincipalTradeValue,minAgencyTradeValue,largerAgencyTradeQtyRequired,priceMovementRequired,agencyAggregationTimeInterval,principalAggregationTimeInterval
+Front Running 1 (alert triggers),,sym+account,sym+brokerID,.alert.frontRunning,25000.0,60000.0,500000.0,1500000.0,true,true,00:00:10.000000000,00:00:30.000000000
+Front Running 2 (agencyEntityLevel doesn't trigger),,sym+traderID,sym+brokerID,.alert.frontRunning,25000.0,60000.0,500000.0,1500000.0,true,true,00:00:10.000000000,00:00:30.000000000
+Front Running 3 (principalEntityLevel doesn't trigger),,sym+account,sym+traderID,.alert.frontRunning,25000.0,60000.0,500000.0,1500000.0,true,true,00:00:10.000000000,00:00:30.000000000
+Front Running 4 (minPrincipalQty too high),,sym+account,sym+brokerID,.alert.frontRunning,26000.0,60000.0,500000.0,1500000.0,true,true,00:00:10.000000000,00:00:30.000000000
+Front Running 5 (minAgencyQty too high),,sym+account,sym+brokerID,.alert.frontRunning,25000.0,70000.0,500000.0,1500000.0,true,true,00:00:10.000000000,00:00:30.000000000
+Front Running 6 (minPrincipalValue too high),,sym+account,sym+brokerID,.alert.frontRunning,25000.0,60000.0,560160.0,1500000.0,true,true,00:00:10.000000000,00:00:30.000000000
+Front Running 7 (minAgencyValue too high),,sym+account,sym+brokerID,.alert.frontRunning,25000.0,60000.0,500000.0,1574830.0,true,true,00:00:10.000000000,00:00:30.000000000
+Front Running 8 (agencyAggregationTime too short),,sym+account,sym+brokerID,.alert.frontRunning,25000.0,60000.0,500000.0,1500000.0,true,true,00:00:05.000000000,00:00:30.000000000
+Front Running 9 (principalAggregationTime too short),,sym+account,sym+brokerID,.alert.frontRunning,25000.0,60000.0,500000.0,1500000.0,true,true,00:00:10.000000000,00:00:20.000000000
+Front Running 10 (larger agency qty required FALSE comparison case for TRUE),,sym+account,sym+brokerID,.alert.frontRunning,10000.0,20000.0,200000.0,500000.0,false,true,00:00:01.000000000,00:00:40.000000000
+Front Running 10 (larger agency qty required TRUE),,sym+account,sym+brokerID,.alert.frontRunning,10000.0,20000.0,200000.0,500000.0,true,true,00:00:01.000000000,00:00:40.000000000
+Front Running 11 (filters test),venue=*FD*;sym=XYZ*;brokerID=*FD*|*SCB*,sym+account,sym+brokerID,.alert.frontRunning,10000.0,20000.0,200000.0,500000.0,false,true,00:00:01.000000000,00:00:40.000000000

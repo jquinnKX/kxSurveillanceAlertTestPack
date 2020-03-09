@@ -1,0 +1,17 @@
+instance,filters,entityLevel,alertFunction,thresholdMinTradeValue,thresholdPercentageOver,minTradeQty,benchmarkInstance,volumeMeasure
+UTV_Test1,instrumentID=U*;eventType=new;executionID=UTV*,instrumentID,.alert.unusualTradeVol,3000000,51,0,,value
+UTV_Test2,instrumentID=USM6;eventType=new;executionID=UTV*,instrumentID,.alert.unusualTradeVol,5806000,0,0,,value
+UTV_Test3,assetClass=FX_EXCH;instrumentID=U*;eventType=new;executionID=UTV*,instrumentID,.alert.unusualTradeVol,5000000,20,0,,value
+UTV_Test4,assetClass=EQUITIES_EXCH_4;eventType=new;executionID=UTV*,instrumentID,.alert.unusualTradeVol,4500000,0,0,,value
+UTV_Test5,instrumentID=U*;eventType=new;executionID=UTV*,instrumentID+assetClass,.alert.unusualTradeVol,200000,10,0,,value
+UTV_Test6,trader=*FD111TraderID*;eventType=new;executionID=UTV*,instrumentID+trader,.alert.unusualTradeVol,5000000,10,0,,value
+UTV_Test7,trader=*FD888TraderID*;eventType=new;executionID=UTV*,instrumentID+trader,.alert.unusualTradeVol,4000000,30,0,,value
+UTV_Test8,instrumentID=U*;eventType=new;executionID=UTV*,instrumentID+assetClass,.alert.unusualTradeVol,2000000,50,0,,value
+UTV_Test9,assetClass=EQUITIES_EXCH_5;trader=*FD888TraderID*;eventType=new;executionID=UTV*,instrumentID,.alert.unusualTradeVol,405019,0,0,,value
+UTV_Test10,assetClass=EQUITIES_EXCH_5;trader=*FD888TraderID*;eventType=new;executionID=UTV*,instrumentID,.alert.unusualTradeVol,405020,0,0,,value
+UTV_Test11,assetClass=EQUITIES_EXCH_5;trader=*FD888TraderID*;eventType=new;executionID=UTV*,instrumentID+side,.alert.unusualTradeVol,405019,0,0,,value
+UTV_BTest1,instrumentID=U*;eventType=new;executionID=UTV*,instrumentID,.alert.unusualTradeVol,5806000,51,0,UTV_BTest1,value
+UTV22:UTV8 but minTradeQty to prevent trigger,instrumentID=U*;eventType=new;executionID=UTV*,instrumentID+assetClass,.alert.unusualTradeVol,5500000,50,750000,,value
+UTV_Test28,assetClass=FX_OTC;eventTimestamp=2015.04.15*|2019.12.31*;eventType=new;executionID=UTV*,instrumentID+trader,.alert.unusualTradeVol,4000000,30,0,,value
+UTV33:  volumeMeasure=qty test (positive),instrumentID=U*;eventType=new;executionID=UTV*,instrumentID,.alert.unusualTradeVol,0,51,5249999,UTV33:  volumeMeasure=qty test,qty
+UTV33:  volumeMeasure=qty test (negative),instrumentID=U*;eventType=new;executionID=UTV*,instrumentID,.alert.unusualTradeVol,0,51,5250000,UTV33:  volumeMeasure=qty test,qty

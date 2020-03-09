@@ -1,0 +1,560 @@
+<ui>
+	<name>dc8a9512-60fc-40e1-ae12-5e3b9386a0a2</name>
+	<displayName>ALERT_TEST_PACK</displayName>
+	<description>{
+  "creationDate": "Mon, 27 Jan 2020 10:55:32 GMT",
+  "lastUpdateDate": "Fri, 07 Feb 2020 18:55:17 GMT",
+  "tags": [],
+  "screenDetails": [
+    {
+      "label": "Screen 1",
+      "value": "13e531e8-5d99-895a-218d-ede980da5cd0"
+    }
+  ],
+  "thumb": null
+}</description>
+	<data>{
+  "id": "dc8a9512-60fc-40e1-ae12-5e3b9386a0a2",
+  "name": "ALERT_TEST_PACK",
+  "creationDate": "Mon, 27 Jan 2020 10:55:32 GMT",
+  "lastUpdateDate": "Fri, 07 Feb 2020 18:55:17 GMT",
+  "thumb": null,
+  "screenDetails": [
+    {
+      "label": "Screen 1",
+      "value": "13e531e8-5d99-895a-218d-ede980da5cd0"
+    }
+  ],
+  "screens": [
+    {
+      "id": "13e531e8-5d99-895a-218d-ede980da5cd0",
+      "name": "Screen 1",
+      "thumb": null,
+      "widgets": [
+        {
+          "id": "d57b7c1b-bd64-b7ce-6f0a-5ace54e2f608",
+          "layout": {
+            "row": 0,
+            "column": 0,
+            "rowSpan": 2,
+            "colSpan": 36
+          },
+          "component": {
+            "id": "component_993",
+            "key": "Dataform",
+            "options": {
+              "version": "4.3.1",
+              "isDataform": true,
+              "Basics": {
+                "Data": {
+                  "_dashboardsType": "data",
+                  "value": "reportInputs"
+                },
+                "SubmitButtonText": "Submit",
+                "ValidationAnalytic": "",
+                "ExpandDictParameters": true,
+                "ForceExecute": false,
+                "ShowReset": false,
+                "ShowSubmit": true,
+                "FloatSubmit": true,
+                "FloatReset": false,
+                "ViewStates": [
+                  {
+                    "DisplayName": "Ingest Data",
+                    "FieldType": {},
+                    "HideParameter": false,
+                    "PathEnc": "reportInputs%2FingestData"
+                  },
+                  {
+                    "DisplayName": "Run Alerts",
+                    "FieldType": {},
+                    "HideParameter": false,
+                    "PathEnc": "reportInputs%2FrunAlerts"
+                  },
+                  {
+                    "DisplayName": "Emails",
+                    "FieldType": {},
+                    "HideParameter": false,
+                    "PathEnc": "reportInputs%2Femails"
+                  },
+                  {
+                    "DisplayName": "Version",
+                    "FieldType": {},
+                    "HideParameter": false,
+                    "PathEnc": "reportInputs%2Fversion"
+                  },
+                  {
+                    "DisplayName": "Only Test These Alerts",
+                    "FieldType": {},
+                    "HideParameter": false,
+                    "PathEnc": "reportInputs%2FonlyTestTheseAlerts"
+                  }
+                ],
+                "Actions": []
+              },
+              "Style": {
+                "advanced": "",
+                "cssClasses": "",
+                "minWidth": "",
+                "display": "Row",
+                "inline": "Top",
+                "labelWidth": "",
+                "labelAlign": "Left",
+                "padding": "",
+                "verticalSpacing": "",
+                "submitOffset": "",
+                "resetOffset": "",
+                "formMargin": "",
+                "labelPadding": ""
+              },
+              "Alignment": {
+                "paddingLeft": 0,
+                "paddingRight": 0,
+                "paddingTop": 0,
+                "paddingBottom": 0,
+                "innerPaddingLeft": 0,
+                "innerPaddingRight": 0,
+                "innerPaddingTop": 0,
+                "innerPaddingBottom": 0,
+                "titlePaddingLeft": 0,
+                "titlePaddingRight": 0,
+                "titlePaddingTop": 7,
+                "titlePaddingBottom": 7
+              },
+              "format": {
+                "titleFontSize": "16",
+                "titleHorizontal": "Center",
+                "titleShadow": false,
+                "tileBorderWidth": 0,
+                "tileBorderRounding": 0,
+                "tileBorderColor": "#000000",
+                "tileBackgroundColor": "#000000",
+                "tileTransparentBackground": true,
+                "tileShadow": false
+              }
+            },
+            "containerId": null,
+            "components": [],
+            "widgets": [],
+            "definitionId": "27",
+            "hasOnSettingsChange": true
+          }
+        },
+        {
+          "id": "ffe26f4a-3803-385c-d7f1-90b6c3b61973",
+          "layout": {
+            "row": 2,
+            "column": 0,
+            "rowSpan": 13,
+            "colSpan": 36
+          },
+          "component": {
+            "id": "component_1431",
+            "key": "Datagrid",
+            "options": {
+              "version": "4.4.1",
+              "selectedColumnPossibleValues": [
+                "time",
+                "status"
+              ],
+              "sortingPossibleValues": [
+                "",
+                "time",
+                "status"
+              ],
+              "Basics": {
+                "Data": {
+                  "_dashboardsType": "data",
+                  "value": "reportStatus"
+                }
+              },
+              "Alignment": {
+                "paddingLeft": 0,
+                "paddingRight": 0,
+                "paddingTop": 0,
+                "paddingBottom": 0,
+                "innerPaddingLeft": 0,
+                "innerPaddingRight": 0,
+                "innerPaddingTop": 0,
+                "innerPaddingBottom": 0,
+                "titlePaddingLeft": 0,
+                "titlePaddingRight": 0
+              },
+              "format": {
+                "tileBorderWidth": 0,
+                "tileBorderRounding": 0,
+                "tileBorderColor": "#000000",
+                "tileBackgroundColor": "#000000",
+                "tileTransparentBackground": true,
+                "tileShadow": false
+              },
+              "datagridPossibleColumns": [
+                "time",
+                "status"
+              ],
+              "highlightTargetPossibleValues": [
+                "time",
+                "status",
+                "*"
+              ],
+              "ColumnsConfiguration": [
+                {
+                  "Field": "time",
+                  "DisplayName": "time",
+                  "Format": "DateTime",
+                  "TimeFormat": "HH:mm:ss.SSSSSSSSS",
+                  "WidthWeight": 100,
+                  "MinWidthAbsolute": 100,
+                  "TextAlign": "left"
+                },
+                {
+                  "Field": "status",
+                  "DisplayName": "status",
+                  "WidthWeight": 100,
+                  "MinWidthAbsolute": 100,
+                  "TextAlign": "left"
+                }
+              ]
+            },
+            "containerId": null,
+            "components": [],
+            "widgets": [],
+            "definitionId": "21",
+            "hasOnSettingsChange": true
+          }
+        },
+        {
+          "id": "5d67bd1c-2414-aebb-436d-f08dcbd759b8",
+          "layout": {
+            "row": 15,
+            "column": 0,
+            "rowSpan": 9,
+            "colSpan": 36
+          },
+          "component": {
+            "id": "component_1106",
+            "key": "Datagrid",
+            "options": {
+              "version": "4.4.1",
+              "selectedColumnPossibleValues": [
+                ""
+              ],
+              "sortingPossibleValues": [
+                ""
+              ],
+              "Basics": {
+                "Data": {
+                  "_dashboardsType": "data",
+                  "value": "reportResults"
+                }
+              },
+              "Alignment": {
+                "paddingLeft": 0,
+                "paddingRight": 0,
+                "paddingTop": 0,
+                "paddingBottom": 0,
+                "innerPaddingLeft": 0,
+                "innerPaddingRight": 0,
+                "innerPaddingTop": 0,
+                "innerPaddingBottom": 0,
+                "titlePaddingLeft": 0,
+                "titlePaddingRight": 0
+              },
+              "format": {
+                "titleFontBold": false,
+                "titleTransparentBackground": false,
+                "tileBorderWidth": 0,
+                "tileBorderRounding": 0,
+                "tileBorderColor": "#000000",
+                "tileBackgroundColor": "#000000",
+                "tileTransparentBackground": true,
+                "tileShadow": false
+              }
+            },
+            "containerId": null,
+            "components": [],
+            "widgets": [],
+            "definitionId": "21",
+            "hasOnSettingsChange": true
+          }
+        }
+      ],
+      "relativeHeight": true,
+      "rowCount": 24,
+      "colCount": 36,
+      "floatable": false,
+      "isDefault": true
+    }
+  ],
+  "popups": [],
+  "tags": [],
+  "dashboardTheme": "Dark",
+  "themeSwitchable": true,
+  "saveTimestamp": null,
+  "relativeHeight": true,
+  "rowCount": 24,
+  "colCount": 36,
+  "floatable": false,
+  "viewState": {
+    "selected": {
+      "_viewType": true,
+      "_default": "0",
+      "value": "0",
+      "_type": "symbol"
+    },
+    ".settings": {
+      "component_1431": {
+        "version": 0,
+        "GroupingConfiguration": []
+      },
+      "component_1106": {
+        "version": 0,
+        "GroupingConfiguration": []
+      }
+    },
+    "reportInputs": {
+      "ingestData": {
+        "_viewType": true,
+        "_type": "boolean",
+        "_default": "",
+        "value": ""
+      },
+      "runAlerts": {
+        "_viewType": true,
+        "_type": "boolean",
+        "_default": "",
+        "value": ""
+      },
+      "emails": {
+        "_viewType": true,
+        "_type": "string",
+        "_default": "",
+        "value": ""
+      },
+      "version": {
+        "_viewType": true,
+        "_type": "symbol",
+        "_default": "",
+        "value": ""
+      },
+      "onlyTestTheseAlerts": {
+        "_viewType": true,
+        "_type": "string",
+        "_default": "",
+        "value": ""
+      }
+    }
+  },
+  "data": {
+    "reportInputs": {
+      "_pagingType": "NONE",
+      "_autoExec": true,
+      "_columns": [],
+      "_dataType": "query",
+      "_dataSource": "kdb",
+      "_connection": "surv_gw_alertTests",
+      "_mappings": {
+        "key": "",
+        "mappings": {},
+        "value": ""
+      },
+      "_maxRows": 2000,
+      "_subscriptionType": "static",
+      "_subscriptionInterval": 3,
+      "_layout": [
+        {
+          "isExpanded": true,
+          "weight": 2
+        },
+        {
+          "isExpanded": false,
+          "weight": 1
+        },
+        {
+          "isExpanded": false,
+          "weight": 1
+        },
+        {
+          "isExpanded": true,
+          "weight": 0
+        },
+        {
+          "isExpanded": true,
+          "weight": 2
+        }
+      ],
+      "_queryString": "{[ingestData;runAlerts;emails;version;onlyTestTheseAlerts] \r\n  \r\n  .test.testAllAlerts[ingestData;runAlerts;emails;version;onlyTestTheseAlerts]\r\n  }",
+      "_queryParams": [
+        {
+          "name": "ingestData",
+          "index": 0,
+          "type": "boolean",
+          "value": "&lt;%reportInputs/ingestData%&gt;",
+          "IsKdbParam": true,
+          "isViewState": true
+        },
+        {
+          "name": "runAlerts",
+          "index": 1,
+          "type": "boolean",
+          "value": "&lt;%reportInputs/runAlerts%&gt;",
+          "IsKdbParam": true,
+          "isViewState": true
+        },
+        {
+          "name": "emails",
+          "index": 2,
+          "type": "string",
+          "value": "&lt;%reportInputs/emails%&gt;",
+          "IsKdbParam": true,
+          "isViewState": true
+        },
+        {
+          "name": "version",
+          "index": 3,
+          "type": "symbol",
+          "value": "&lt;%reportInputs/version%&gt;",
+          "IsKdbParam": true,
+          "isViewState": true
+        },
+        {
+          "name": "onlyTestTheseAlerts",
+          "index": 4,
+          "type": "string",
+          "value": "&lt;%reportInputs/onlyTestTheseAlerts%&gt;",
+          "IsKdbParam": true,
+          "isViewState": true
+        }
+      ],
+      "_subscriptionKey": "",
+      "_hasUpdateQuery": false,
+      "_updateQueryString": "",
+      "_updateType": "query",
+      "_pageSize": 2000,
+      "_serverPaging": false
+    },
+    "reportStatus": {
+      "_pagingType": "NONE",
+      "_autoExec": true,
+      "_columns": [
+        "time",
+        "status"
+      ],
+      "_dataType": "query",
+      "_dataSource": "kdb",
+      "_connection": "surv_gw_alertTests",
+      "_mappings": {
+        "key": "time",
+        "mappings": {},
+        "value": "status"
+      },
+      "_maxRows": 2000,
+      "_subscriptionType": "polling",
+      "_subscriptionInterval": 1,
+      "_layout": [
+        {
+          "isExpanded": true,
+          "weight": 2
+        },
+        {
+          "isExpanded": false,
+          "weight": 1
+        },
+        {
+          "isExpanded": false,
+          "weight": 1
+        },
+        {
+          "isExpanded": true,
+          "weight": 0
+        },
+        {
+          "isExpanded": true,
+          "weight": 2
+        }
+      ],
+      "_queryString": "{[]\r\n\r\n  reverse .test.testPackStatus\r\n\r\n }",
+      "_queryParams": [],
+      "_subscriptionKey": "",
+      "_hasUpdateQuery": false,
+      "_updateQueryString": "",
+      "_updateType": "query",
+      "_pageSize": 2000,
+      "_serverPaging": false
+    },
+    "reportResults": {
+      "_autoExec": true,
+      "_columns": [],
+      "_dataType": "query",
+      "_dataSource": "kdb",
+      "_connection": "surv_gw_alertTests",
+      "_maxRows": "1000",
+      "_subscriptionType": "polling",
+      "_subscriptionInterval": 3,
+      "_layout": [
+        {
+          "isExpanded": true,
+          "weight": 2
+        },
+        {
+          "isExpanded": false,
+          "weight": 1
+        },
+        {
+          "isExpanded": false,
+          "weight": 1
+        },
+        {
+          "isExpanded": true,
+          "weight": 1
+        },
+        {
+          "isExpanded": true,
+          "weight": 2
+        }
+      ],
+      "_queryString": ".test.fails",
+      "_queryParams": [],
+      "_subscriptionKey": "_rowIndex",
+      "_hasUpdateQuery": false,
+      "_updateQueryString": "",
+      "_updateType": "query",
+      "_pageSize": 2000,
+      "_serverPaging": false
+    }
+  },
+  "worksheetPadding": 10,
+  "widgetsSpacing": 0,
+  "borderColor": "000000",
+  "borderBackground": "000000",
+  "transparentBackground": true,
+  "borderWidth": 0,
+  "borderRounding": 0,
+  "borderSpacing": 0,
+  "borderShadow": false,
+  "enableShareDashboard": false,
+  "notifications": {
+    "Notifications": {
+      "_Version": "4.2.0s2",
+      "Enabled": true,
+      "InBrowserNotifications": false,
+      "Position": "Bottom Right",
+      "MaxVisibleCount": 3,
+      "FadeOut": 5,
+      "Icon": "fa-bell-o",
+      "Sound": "beep",
+      "SoundVolume": 100,
+      "Grouping": false,
+      "GroupingInterval": 1,
+      "triggers": []
+    }
+  },
+  "showLoadingIndicators": true,
+  "unsavedViewerPrompt": false,
+  "advancedCss": "",
+  "cssClasses": "",
+  "viewStateBinding": false,
+  "wasChanged": false,
+  "version": "4.4.0p7"
+}</data>
+</ui>

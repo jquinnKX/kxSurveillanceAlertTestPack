@@ -1,0 +1,28 @@
+instance,filters,entityLevel,alertFunction,priceMovementAlertInstance,priceMovementEntityLevelMatch,comparisonOrderDateInterval,comparisonOrdersValuePortfolioPct,referenceOrderDateInterval,announcementDateInterval,comparisonRefValueMultiplier
+ATIT_Test1,sym=ATIT*;sourceConnection<>*newprice*,sym+product,.alert.attemptToInsideTrade,UTPM35: PM Alert Instance for ATIT,false,2,19.0,2,2,0.5
+ATIT_Test2,sym=ATIT*;sourceConnection<>*newprice*,sym+product+traderID,.alert.attemptToInsideTrade,UTPM35: PM Alert Instance for ATIT,false,2,59.0,2,2,0.5
+ATIT_Test3,sym=ATIT*;sourceConnection<>*newprice*,sym+account,.alert.attemptToInsideTrade,UTPM35: PM Alert Instance for ATIT,true,2,19.0,2,2,0.5
+ATIT_Test4,sym=ATIT*;sourceConnection<>*newprice*,sym+product,.alert.attemptToInsideTrade,UTPM_NOEXIST,false,2,19.0,2,2,0.5
+ATIT_Test5,sym<>ATIT*;sourceConnection<>*newprice*,sym+product,.alert.attemptToInsideTrade,UTPM35: PM Alert Instance for ATIT,true,2,19.0,2,2,0.5
+ATIT_Test6,sym=ATIT*;sourceConnection<>*newprice*,sym+product,.alert.attemptToInsideTrade,UTPM35: PM Alert Instance for ATIT,false,2,19.0,2,2,0.5
+ATIT_Test7,sym=ATIT*;sourceConnection<>*newprice*,sym+product,.alert.attemptToInsideTrade,UTPM35: PM Alert Instance for ATIT,false,0,19.0,2,2,0.5
+ATIT_Test8,sym=ATIT*;sourceConnection<>*newprice*,sym+product,.alert.attemptToInsideTrade,UTPM35: PM Alert Instance for ATIT,false,2,60.0,2,2,0.5
+ATIT_Test9,sym=ATIT*;sourceConnection<>*newprice*,sym+product,.alert.attemptToInsideTrade,UTPM35: PM Alert Instance for ATIT,false,2,19.0,2,2,0.5
+ATIT_Test10,sym=ATIT*;sourceConnection<>*newprice*,sym+product,.alert.attemptToInsideTrade,UTPM35: PM Alert Instance for ATIT,false,2,19.0,2,2,2.0
+ATIT_Test11,sym=ATITSym;intUserIDAcctType=REF_AccTypeFDUUID2;sourceConnection<>*newprice*,sym+intUserIDBranch,.alert.attemptToInsideTrade,UTPM35: PM Alert Instance for ATIT,false,2,18.0,2,2,1.5
+ATIT_Test12,sym=PER*;sourceConnection<>*newprice*,sym+product,.alert.attemptToInsideTrade,UTPM35: PM Alert Instance for ATIT,false,2,19.0,2,2,0.5
+ATIT_Test13,sym=ATIT*|PER*|USM*|ACT*,sym+account+LEI,.alert.attemptToInsideTrade,UTPM34: triggers for account+LEI (and for dependent alert),true,2,33.33,2,2,0.45
+ATIT1A:  No news + pm decrease + no match + suspects are cancelled B orders,sym=atSym1,sym+traderID,.alert.attemptToInsideTrade,UTPM35: PM Alert Instance for ATIT,false,1,49.0,1,1,4.9
+ATIT1B:  No news + pm decrease + match + suspects are cancelled B orders,sym=atSym1,sym+traderID,.alert.attemptToInsideTrade,UTPM35: PM Alert Instance for ATIT,true,1,49.0,1,1,4.9
+ATIT2:  No news + pm increase + no match + suspects are cancelled S orders,sym=atSym3,sym+traderID,.alert.attemptToInsideTrade,UTPM35: PM Alert Instance for ATIT,false,1,49.0,1,1,4.9
+ATIT3:  No news + pm increase + match + suspects are cancelled S orders,sym=pmSym,sym+traderID,.alert.attemptToInsideTrade,UTPM35: PM Alert Instance for ATIT,true,1,49.0,1,1,4.9
+ATIT4A:  No news + pm decrease + match + suspects are cancelled B orders + ref window=2,sym=elSym1,sym+traderID,.alert.attemptToInsideTrade,UTPM35: PM Alert Instance for ATIT,true,1,49.0,2,1,9.4
+ATIT4B:  No news + pm decrease + match + suspects are cancelled B orders + ref window=2,sym=elSym1,sym+traderID,.alert.attemptToInsideTrade,UTPM35: PM Alert Instance for ATIT,true,1,49.0,2,1,9.5
+ATIT5A:  No news + pm decrease + match + suspects are cancelled B orders + comp window=2,sym=elSym2,sym+traderID,.alert.attemptToInsideTrade,UTPM35: PM Alert Instance for ATIT,true,2,59.0,1,1,5.9
+ATIT5B:  No news + pm decrease + match + suspects are cancelled B orders + comp window=2,sym=elSym2,sym+traderID,.alert.attemptToInsideTrade,UTPM35: PM Alert Instance for ATIT,true,2,60.0,1,1,5.9
+ATIT6:  No news + pm decrease + match + suspects are cancelled B orders (none on last day) + comp window=2,sym=elSym3,sym+traderID,.alert.attemptToInsideTrade,UTPM35: PM Alert Instance for ATIT,true,2,33.33,1,1,3.33
+ATIT7: news + pm increase + match + suspect orders are buy orders fulfilled,sym=dxNewsSym1,sym+traderID,.alert.attemptToInsideTrade,UTPM35: PM Alert Instance for ATIT,true,1,83.19,3,1,1.18
+ATIT8: news + pm decrease+ match + suspect orders are sell orders fulfilled,sym=dxNewsSym2,sym+traderID,.alert.attemptToInsideTrade,UTPM35: PM Alert Instance for ATIT,true,1,83.19,3,2,1.18
+ATIT9: duplicate data as ATIT8 but news for sym is outside announcement window (too early),sym=noNewsSym,sym+traderID,.alert.attemptToInsideTrade,UTPM35: PM Alert Instance for ATIT,true,1,83.19,3,2,1.18
+ATIT10: Suspect Orders must be cancelled before UTPM alert time (positive test),sym=SLWCNL,sym+traderID,.alert.attemptToInsideTrade,UTPM41: PM Alert Instance for v1.4 ATIT order cancel time restriction,false,1,10.34,1,1,2.494
+ATIT10: Suspect Orders must be cancelled before UTPM alert time (negative test),sym=SLWCNL,sym+traderID,.alert.attemptToInsideTrade,UTPM41: PM Alert Instance for v1.4 ATIT order cancel time restriction,false,1,10.35,1,1,2.494

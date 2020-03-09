@@ -1,0 +1,147 @@
+<analytic>
+	<analytic>.test.loadTestFiles</analytic>
+	<code_text>{[]
+	
+	.log.out[.z.h;"Analytic .test.loadTestFiles running on timer.  Currently processing file ",string[.test.alertTestFiles[.test.state-1]];()];
+
+	if[.test.iAmOccupiedWritingDownData;
+		:()
+	];
+
+	if[.test.state&lt;count .test.alertTestFiles;
+		.test.iAmOccupiedWritingDownData:1b;
+		@[.test.writeDownAlertTestFile;.test.alertTestFiles[.test.state];{.log.err[.z.h;".test.writeDownAlertTestFile had error: ";x];.test.sendErrorEmail[x]}];
+		.test.state+:1;
+		.test.iAmOccupiedWritingDownData:0b;
+		:()
+	]; 
+
+	.log.out[.z.h;".test.loadTestFiles";"Finished writing down alert test files"];
+	.log.out[.z.h;".test.loadTestFiles";"populating empty schemas into 1800.01.01 to allow select by date"];
+	
+	if[.test.ingestData;
+		{
+			/requiredSchemas:distinct (exec udfTable from .[.uc.getActiveParamValue;(`SURV_UDF;`);([]udfTable:``)]),(raze`$","vs/:exec tabs from .[.uc.getActiveParamValue;(`SURV_ALERTS;`);([]udfTable:``)] where alertName in .test.activeAlertsToTest),exec benchmarkSchema from .[.uc.getActiveParamValue;(`SURV_BENCHMARKS;`);([]benchmarkSchema:``)] where alertName in .test.activeAlertsToTest;
+			requiredSchemas:distinct `$first each "_" vs/: last each "/" vs/:string .test.alertTestFiles;			
+			/alreadyDatePartitioned:.ds.gw.query[`hdb;".Q.pt[]"];
+			alreadyDatePartitioned:.test.HDBHandle".Q.pt[]";
+			needToPartition:requiredSchemas except alreadyDatePartitioned;
+			{.tbl.gettable[x];(` sv .Q.par[.test.hdbpath;1800.01.01;x],`) set .Q.en[.test.hdbpath] get[x]}each needToPartition;		
+		
+			.Q.chk[.test.hdbpath];
+			/.dataloader.reloadHDB[`;`];
+			.test.HDBHandle({system"l ."};`);
+		}[];
+		
+		$[.test.forceKillAfterIngestion;
+			[
+				if[not .test.ihaveForceKilledHDBs;
+					.test.ingestionEndTime:.z.p;
+					.log.out[.z.h;".test.loadTestFiles";"Force-killing hdbs"];
+					.ex.prh({.pl.sendKILLproc each x};.test.hdbsToKill);
+					.test.ihaveForceKilledHDBs:1b;
+					:()
+				];
+			];
+			.test.ingestionEndTime:.z.p
+		];
+		
+		if[.test.forceKillAfterIngestion;
+			if[.test.ihaveForceKilledHDBs;				
+				allAreBackUp:(enlist[`running])~.ex.prh({exec distinct lastRunStatus from .wf.getTaskSummaryForWF[`SURV_Master_Processes_A] where taskName in x};.test.hdbsToKill);
+				if[not allAreBackUp;
+					.log.out[.z.h;".test.loadTestFiles";"HDBs not back up yet"];
+					:()
+				];
+			];
+		];
+		.test.updateStatus`$"Test Data Loaded";
+	];
+	
+	//Remove from timer:
+	.d.prcl.removeFuncFromTimerByID exec first actID from .d.prcl.timerFunct where functName=`.test.loadTestFilesWrapper;
+	
+	if[.test.checkForDataDifference;
+		/take a snapshot of the data counts in HDB now so can determine if changed since last run
+		target:`instance.surv_hdb_3_a;
+		/.test.allTablesRowCountsByDate:.ds.gw.query[`targets`queryType!(target;`sync);("(uj/){$[`date in cols x;`tab`date`rowCount xcols 0!update tab:x from select rowCount:count i by date from x;0#([]tab:enlist x;date:0Nd;rowCount:0)]}each tables[]")];
+		.test.allTablesRowCountsByDate:.test.HDBHandle"(uj/){$[`date in cols x;`tab`date`rowCount xcols 0!update tab:x from select rowCount:count i by date from x;0#([]tab:enlist x;date:0Nd;rowCount:0)]}each tables[]";
+			
+			previousSnapshotsPaths:{x where x like "*allTablesRowCountsByDate_*"}system"find ",string[.test.dataDir];
+			{[previousSnapshotsPaths]
+				if[count previousSnapshotsPaths; 
+					.log.out[.z.h;".test.loadTestFiles";"FOUND PREVIOUS DATA SNAPSHOTS"];
+					previousSnapshotsTimestamps:"P"$last each "_" vs/: previousSnapshotsPaths;
+					positionOfMostRecent:first idesc previousSnapshotsTimestamps;
+					mostRecentSnapshotPath:previousSnapshotsPaths[positionOfMostRecent];  
+					.test.mostRecentSnapshot:get hsym`$mostRecentSnapshotPath;
+					
+					.test.missingData:{(`$string[cols[x]],\:"_missingData")xcol x}.test.mostRecentSnapshot except .test.allTablesRowCountsByDate;
+					.test.additionalData:{(`$string[cols[x]],\:"_additionalData")xcol x}.test.allTablesRowCountsByDate except .test.mostRecentSnapshot;
+					 
+					currConsoleSize:system"c";
+					system"c 80 200";
+					.test.dataWarningEmailBody:.Q.s[.test.missingData]," \n",.Q.s[.test.additionalData];
+					system"c "," "sv string currConsoleSize;
+					if[count[.test.missingData]+count[.test.additionalData];
+						.log.out[.z.h;"Sending Data Warning email to ",.test.email;()];
+						splitPath:"/" vs first system"pwd";
+						.test.nameOfEnv:first splitPath 1+where splitPath like "install";
+						.test.sendEmail:{[email].pl.sendemail[`to`sub`body!(enlist`$email;"[Automatic Alert Test DATA DIFFERENCE FOUND] ",.test.nameOfEnv," ",.test.version;.test.dataWarningEmailBody)]};
+						.test.sendEmail each ";" vs .test.email;
+					];
+				];
+			}[previousSnapshotsPaths];
+			/now write down this snapshot
+			.log.out[.z.h;".test.loadTestFiles";"WRITING DOWN DATA SNAPSHOT"];
+			hsym[`$string[.test.dataDir],"allTablesRowCountsByDate_",except[string .z.p;":."]]set .test.allTablesRowCountsByDate;
+	];
+	
+	$[(not `ingestionEndTime in key .test);
+		.test.ingestionEndTime:.z.p;
+	.test.ingestionEndTime&lt;.test.startTime;
+		.test.ingestionEndTime:.z.p
+	];
+		
+	
+	
+	.test.reranDependentAlertsAfterClosingHistoricalAlerts:0b;	
+	.test.state:0;
+	.test.numberOfErrorEmailsSentOutAlready:0;
+	
+	$[.test.runAlerts;
+		[
+		
+			actionTrackerGW:@[.pl.gethostport;;{.log.error[.z.h;"Error getting port for Report Generator";x];:()}] `surv_gw_at_a; 
+			.log.out[.z.h;".test.testAllAlerts";"Connecting to AT GW"];
+			.test.actionTrackerGWHandle: {.utils.dcc[x;0;{[x;y].pl.report_error_addInfo["Unable to open ",(string x);y];`$"Can't connect to report generator"}[x]]} actionTrackerGW;
+			.log.out[.z.h;".test.testAllAlerts";"Connected to AT GW"];
+			.test.freshDeploy:not .test.actionTrackerGWHandle({sum .ds.gw.query[`at`hdb;"count dxATAlert"]};`);		
+		
+			$[.test.ingestData and .test.forceKillAfterIngestion;
+				.d.prcl.addFunctToTimer[`.test.alertTestsWrapper;.test.reports;"z"$.z.p+0D00:01:00.000;0Nz;15000;1b];
+				.d.prcl.addFunctToTimer[`.test.alertTestsWrapper;.test.reports;.z.Z;0Nz;15000;1b]
+			];
+		];
+		[
+			.test.subject:"Test Data Loaded";
+			.test.emailBody:"Test Data Loaded";
+			.test.sendEmail:{[email].pl.sendemail[`to`sub`body!(enlist`$email;.test.subject,.test.nameOfEnv," ",string[.test.version];.test.emailBody)]};
+			.test.sendEmail each ";" vs .test.email;
+			.log.out[.z.h;".test.loadTestFiles";"Test Data Loaded.  Script Finished"];
+			.test.exitWithoutError`$"TEST SCRIPT COMPLETE";
+		]
+	];
+}</code_text>
+	<description>Loads all the files needed for alert testing.</description>
+	<dictionaryparams>0</dictionaryparams>
+	<typ>Analytic</typ>
+	<private>0</private>
+	<returntype></returntype>
+	<returndata></returndata>
+	<defaultconnection></defaultconnection>
+	<alias></alias>
+	<analytictype>polling</analytictype>
+	<returndescription></returndescription>
+	<analyticgroup>kxSurveillanceAlertTests</analyticgroup>
+</analytic>

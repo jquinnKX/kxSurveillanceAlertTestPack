@@ -1,0 +1,113 @@
+<analytic>
+	<analytic>.test.writeDownAlertTestFile</analytic>
+	<code_text>{[filePath]
+	.debug.writeDownAlertTestFile:filePath;
+	filePath:string filePath;
+	
+	.log.out[.z.h;".test.writeDownAlertTestFile";"started for ",filePath];
+	.test.updateStatus`$"writing down ",last "/"vs filePath;
+
+	unixConcatinatedCSV:system"cat ",filePath;
+	headers:`$","vs first unixConcatinatedCSV;	
+	
+	tableToBePopulated:`$"_"sv -1_"_"vs last "/"vs filePath;
+	$[tableToBePopulated in .test.validTableList;
+		baseTableName:tableToBePopulated;	 
+		baseTableName:`$"_"sv -1_"_"vs string[tableToBePopulated]
+	];
+	.tbl.gettable[baseTableName];
+	if[not all (cols[baseTableName] inter `instrumentID`eventTimestamp) in headers;.test.exitWriteDownAlertTestFile[filePath;"No eventTimestamp and/or instrumentID column in csv"];:()];
+	res:@[get;baseTableName;`tableDoesntExist];
+	if[res~`tableDoesntExist;.test.exitWriteDownAlertTestFile[filePath;"Table called ",string[baseTableName]," doesnt exist"];:()];	
+	
+	tableToBePopulated set `date xcols update date:0Nd from get baseTableName; 
+	requiredMeta:([]c:headers;sequenceNumber:til[count[headers]])lj update thisColumnIsInTable:1b from meta tableToBePopulated;
+	columnsInCSVThatExistInTable:exec c from requiredMeta where thisColumnIsInTable;
+	columnPositionsInCSVThatExistInTable:exec sequenceNumber from requiredMeta where thisColumnIsInTable;
+	requiredCasts:exec t from {update t:"*" from x where t~'" "}update upper t from select from requiredMeta where thisColumnIsInTable;
+	requiredCasts[where requiredCasts="C"]:"*";
+	acceptableDataFromCSV:{[csvRow;acceptablePositions;casts;colNames]colNames!casts$'(","vs csvRow)[acceptablePositions]}[;columnPositionsInCSVThatExistInTable;requiredCasts;columnsInCSVThatExistInTable]each 1_unixConcatinatedCSV;
+	transtimeColum:$[baseTableName=`dxTradePublic;`transactTime;`eventTimestamp];
+	if[not `date in cols acceptableDataFromCSV;acceptableDataFromCSV:![acceptableDataFromCSV;();0b;enlist[`date]!enlist($;enlist`date;transtimeColum)];]; 
+	if[not `sourceConnection in cols acceptableDataFromCSV;update sourceConnection:count[acceptableDataFromCSV]#enlist[last "/"vs filePath] from acceptableDataFromCSV]; 
+	
+	distinctDatesToWriteTo:exec distinct date from acceptableDataFromCSV;
+
+	/check if nested lists
+	listSchema:{select from x where coltype like "*[[]]*"}.ex.prh({select from .tbl.tablecolumn where table=x};baseTableName);
+	if[count listSchema;
+		listCastDict:(`$("Symbol[]";"Short[]";"Int[]";"Long[]";"Float[]";"Date[]";"Timestamp[]"))!("\"S\"";"\"H\"";"\"I\"";"\"J\"";"\"F\"";"\"D\"";"\"P\"");
+		updateClauses:","sv exec ((string[column],\:":"),'((listCastDict[coltype],\:("$'\" \"vs/:")),'string column)) from listSchema;
+		updateStatement:"update ",updateClauses," from .tmp.acceptableDataFromCSV";
+		.tmp.acceptableDataFromCSV:acceptableDataFromCSV;
+		acceptableDataFromCSV:eval parse[updateStatement]; 
+	];
+
+	{[tableToBePopulated;baseTableName;acceptableDataFromCSV;filePath;thisDate]
+		.tbl.gettable[baseTableName];
+		colsOfTable:cols[baseTableName];
+		.test.getExistingDataForThisDate:{[tableToBePopulated;thisDate]
+			(``date)_.test.HDBHandle({[t;d]select from t where date=d};tableToBePopulated;thisDate)
+		};
+		
+		existingDataForThisDate:.[.test.getExistingDataForThisDate;(tableToBePopulated;thisDate);(``date)_0#acceptableDataFromCSV];
+		.log.out[.z.h;".test.writeDownAlertTestFile";"Existing Data in ",string[tableToBePopulated]," for ",string[thisDate]," has count ",string[count existingDataForThisDate]]; 
+		
+		/there is overlapping test data for different alerts (e.g. largeOrder uses Marking The Close test data).  Do not ingest if sourceConnection already present
+		$[`sourceConnection in cols existingDataForThisDate;
+			[
+				existingSourceConnectionsForThisDate:exec distinct sourceConnection from existingDataForThisDate;
+				acceptableDataFromCSV:select from acceptableDataFromCSV where date=thisDate,not sourceConnection in existingSourceConnectionsForThisDate;
+			];
+				existingDataForThisDate:0#existingDataForThisDate
+		];
+		if[not count acceptableDataFromCSV;
+			.log.out[.z.h;".test.writeDownAlertTestFile";"Nothing new to write down from ",filePath];
+			:()
+		];
+		sortColumns::$[baseTableName=`dxTradePublic;
+						`sym`transactTime;
+					`eventTimestamp in cols[baseTableName];
+						`instrumentID`eventTimestamp;
+						enlist`instrumentID
+		];
+		if[baseTableName=`dxTradePublic;acceptableDataFromCSV:delete aggressorIndicator,possDupFlag from acceptableDataFromCSV]; 
+		tableToBePopulated set sortColumns xasc get[tableToBePopulated] upsert .test.replaceEmptyValues (get[baseTableName] uj existingDataForThisDate) uj (``date)_select from acceptableDataFromCSV where date=thisDate;
+
+		.debug.res:(` sv .Q.par[.test.hdbpath;thisDate;tableToBePopulated],`) set .Q.en[.test.hdbpath] colsOfTable#update recvTime:.z.p from get[tableToBePopulated];
+		if[tableToBePopulated in `order`execution;
+			otherTable:({x!reverse x}`order`execution)tableToBePopulated;
+			.tbl.gettable[otherTable];
+			if[not @[{get[x];1b};hsym `$string[.test.hdbpath],"/",string[thisDate],"/",string[otherTable];0b];
+				(` sv .Q.par[.test.hdbpath;thisDate;otherTable],`) set .Q.en[.test.hdbpath] get[otherTable]
+			];
+		];
+			
+		.log.out[.z.h;".test.writeDownAlertTestFile";"Write-down result is ",string .debug.res]; 
+		delete from tableToBePopulated; 
+		.Q.chk[.test.hdbpath];
+		/.dataloader.reloadHDB[`;`];
+		.test.HDBHandle({system"l ."};`);
+		
+	}[tableToBePopulated;baseTableName;acceptableDataFromCSV;filePath;]each distinctDatesToWriteTo; 
+
+ }</code_text>
+	<description></description>
+	<dictionaryparams>0</dictionaryparams>
+	<typ>Analytic</typ>
+	<private>0</private>
+	<returntype></returntype>
+	<returndata></returndata>
+	<defaultconnection></defaultconnection>
+	<alias></alias>
+	<analytictype>polling</analytictype>
+	<returndescription></returndescription>
+	<param>
+		<parameter>filePath</parameter>
+		<default></default>
+		<description>default parameter</description>
+		<required>1</required>
+		<datatype>Symbol</datatype>
+	</param>
+	<analyticgroup>kxSurveillanceAlertTests</analyticgroup>
+</analytic>

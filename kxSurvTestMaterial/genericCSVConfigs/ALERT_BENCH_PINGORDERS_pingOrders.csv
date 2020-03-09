@@ -1,0 +1,3 @@
+instance,filters,entityLevel,sampleTimePeriod,startTimeBucket,endTimeBucket,minNoSamples,thresholdWinsorisationLower,thresholdWinsorisationUpper,pingOrderQtyPercentile
+PingT12,assetClass=COMM_EXCH,sym+traderID,2,10:00:00.000,13:00:00.000,1,5.0,95.0,95.0
+PingT12  Can Choose Benchmark Instance Test Bench Instance,assetClass=COMM_EXCH;sourceData<>*doesNotExist*,sym+traderID+LEI,2,10:00:00.000,13:00:00.000,1,5.0,95.0,95.0

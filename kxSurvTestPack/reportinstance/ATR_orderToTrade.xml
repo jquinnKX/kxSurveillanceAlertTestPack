@@ -1,0 +1,36 @@
+<reportinstance>
+	<reportinstance>ATR_orderToTrade</reportinstance>
+	<report>SURV_ALERT_BATCH</report>
+	<process>surv_master</process>
+	<startTime>2020.02.19T00:00:00.000</startTime>
+	<endTime></endTime>
+	<timeout>0</timeout>
+	<instancedescription></instancedescription>
+	<processtype>connectiongroup</processtype>
+	<rptFrequency>None</rptFrequency>
+	<rptInterval>0</rptInterval>
+	<param>
+		<analytic>.surv.master.runBatchFromUI</analytic>
+		<paramname>batchConfig</paramname>
+		<usedefault>0</usedefault>
+		<paramvalue>SURV_ALERT_BATCH:ATR_orderToTrade</paramvalue>
+	</param>
+	<param>
+		<analytic>.surv.master.runBatchFromUI</analytic>
+		<paramname>dt</paramname>
+		<usedefault>0</usedefault>
+		<paramvalue>2015.05.04</paramvalue>
+	</param>
+	<param>
+		<analytic>.surv.master.runBatchFromUI</analytic>
+		<paramname>reuseBenchmarks</paramname>
+		<usedefault>1</usedefault>
+		<paramvalue>false</paramvalue>
+	</param>
+	<param>
+		<analytic>.surv.master.runBatchFromUI</analytic>
+		<paramname>batchName</paramname>
+		<usedefault>0</usedefault>
+		<paramvalue>ATR_orderToTrade</paramvalue>
+	</param>
+</reportinstance>

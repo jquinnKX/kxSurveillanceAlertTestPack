@@ -1,0 +1,277 @@
+<configparam>
+	<ucname>delta_install_default</ucname>
+	<override>DEFAULT</override>
+	<parameter>ALERT_TEST_SETTINGS</parameter>
+	<description>Master table containing the config for each alert</description>
+	<validationAnalytic></validationAnalytic>
+	<param>
+		<index>0</index>
+		<element>item</element>
+		<elementType>Symbol</elementType>
+		<elementValue>Data Folder</elementValue>
+	</param>
+	<param>
+		<index>0</index>
+		<element>setting</element>
+		<elementType>Symbol</elementType>
+		<elementValue></elementValue>
+	</param>
+	<param>
+		<index>0</index>
+		<element>descriptionForUser</element>
+		<elementType>Symbol</elementType>
+		<elementValue>this is where csvs of dxOrder/Trade etc. data are.  Leave blank to take from:  (getenv`DELTA_HOME),"/packages/kxsurveillanceunittestpackage/kxSurveillanceUnitTestPackMaterial/refineryTestData"</elementValue>
+	</param>
+	<param>
+		<index>1</index>
+		<element>item</element>
+		<elementType>Symbol</elementType>
+		<elementValue>Flat File Reference Data Folder</elementValue>
+	</param>
+	<param>
+		<index>1</index>
+		<element>setting</element>
+		<elementType>Symbol</elementType>
+		<elementValue></elementValue>
+	</param>
+	<param>
+		<index>1</index>
+		<element>descriptionForUser</element>
+		<elementType>Symbol</elementType>
+		<elementValue>this is where any flat file reference data files are</elementValue>
+	</param>
+	<param>
+		<index>2</index>
+		<element>item</element>
+		<elementType>Symbol</elementType>
+		<elementValue>Alerts To Test</elementValue>
+	</param>
+	<param>
+		<index>2</index>
+		<element>setting</element>
+		<elementType>Symbol</elementType>
+		<elementValue>baitAndSwitch,highOrderRate,largeOrder,momentumIgnition,orderToTrade,preArrangedTrading,spoofing,unusualTradePriceMov,unusualTradeVol,washTrades</elementValue>
+	</param>
+	<param>
+		<index>2</index>
+		<element>descriptionForUser</element>
+		<elementType>Symbol</elementType>
+		<elementValue>these are the alerts to test</elementValue>
+	</param>
+	<param>
+		<index>3</index>
+		<element>item</element>
+		<elementType>Symbol</elementType>
+		<elementValue>Delay Next Report Run It</elementValue>
+	</param>
+	<param>
+		<index>3</index>
+		<element>setting</element>
+		<elementType>Symbol</elementType>
+		<elementValue>1</elementValue>
+	</param>
+	<param>
+		<index>3</index>
+		<element>descriptionForUser</element>
+		<elementType>Symbol</elementType>
+		<elementValue>.test.alertUnitTests runs on timer.  If group of benchmarks run, and next group of alert reports run next, they may not have given enough time for hdbs to reload and becnhmarks not found.  number here is multiple of 15 seconds.</elementValue>
+	</param>
+	<param>
+		<index>4</index>
+		<element>item</element>
+		<elementType>Symbol</elementType>
+		<elementValue>Re-Run alerts that look for historical alerts</elementValue>
+	</param>
+	<param>
+		<index>4</index>
+		<element>setting</element>
+		<elementType>Symbol</elementType>
+		<elementValue>false</elementValue>
+	</param>
+	<param>
+		<index>4</index>
+		<element>descriptionForUser</element>
+		<elementType>Symbol</elementType>
+		<elementValue>On a fresh deploy (determined by empty dxATAlert), pack will close historical alerts and re-run those that require them to verify that search for historical alerts is working whether in AT RDB or HDB</elementValue>
+	</param>
+	<param>
+		<index>5</index>
+		<element>item</element>
+		<elementType>Symbol</elementType>
+		<elementValue>Configs are in test pack</elementValue>
+	</param>
+	<param>
+		<index>5</index>
+		<element>setting</element>
+		<elementType>Symbol</elementType>
+		<elementValue>false</elementValue>
+	</param>
+	<param>
+		<index>5</index>
+		<element>descriptionForUser</element>
+		<elementType>Symbol</elementType>
+		<elementValue>Indicates if thresholds are in test pack.  If false, they are csvs that don't have to match schema column order exactly.  Csv to be put in directory (next setting)</elementValue>
+	</param>
+	<param>
+		<index>6</index>
+		<element>item</element>
+		<elementType>Symbol</elementType>
+		<elementValue>Config Folder</elementValue>
+	</param>
+	<param>
+		<index>6</index>
+		<element>setting</element>
+		<elementType>Symbol</elementType>
+		<elementValue></elementValue>
+	</param>
+	<param>
+		<index>6</index>
+		<element>descriptionForUser</element>
+		<elementType>Symbol</elementType>
+		<elementValue>Folder that contains csv version of configs (not required to match column order).  Leave blank to take from:  (getenv`DELTA_HOME),"/packages/kxsurveillanceunittestpackage/kxSurveillanceUnitTestPackMaterial/genericCSVConfigs"</elementValue>
+	</param>
+	<param>
+		<index>7</index>
+		<element>item</element>
+		<elementType>Symbol</elementType>
+		<elementValue>Force-kill HDBs after ingestion</elementValue>
+	</param>
+	<param>
+		<index>7</index>
+		<element>setting</element>
+		<elementType>Symbol</elementType>
+		<elementValue>false</elementValue>
+	</param>
+	<param>
+		<index>7</index>
+		<element>descriptionForUser</element>
+		<elementType>Symbol</elementType>
+		<elementValue>In case where calls of .Q.chk and  .dataloader.reloadHDB still does not reload HDBs correctly, set this to true to force kill and restart them</elementValue>
+	</param>
+	<param>
+		<index>8</index>
+		<element>item</element>
+		<elementType>Symbol</elementType>
+		<elementValue>Check for Data Change</elementValue>
+	</param>
+	<param>
+		<index>8</index>
+		<element>setting</element>
+		<elementType>Symbol</elementType>
+		<elementValue>false</elementValue>
+	</param>
+	<param>
+		<index>8</index>
+		<element>descriptionForUser</element>
+		<elementType>Symbol</elementType>
+		<elementValue>If true, after ingestion, takes snapshot of data count summary and compares against last snapshot and emails if difference (helpful to diagnose fails)</elementValue>
+	</param>
+	<param>
+		<index>9</index>
+		<element>item</element>
+		<elementType>Symbol</elementType>
+		<elementValue>Specific HDBs to kill</elementValue>
+	</param>
+	<param>
+		<index>9</index>
+		<element>setting</element>
+		<elementType>Symbol</elementType>
+		<elementValue>emea_hdb_tr_transactionData_0_a</elementValue>
+	</param>
+	<param>
+		<index>9</index>
+		<element>descriptionForUser</element>
+		<elementType>Symbol</elementType>
+		<elementValue>If 'Force-kill HDBs after ingestion' setting above is true,  and this list isn't blank, then these will be specifically killed (likely just benchmark HDBs required)</elementValue>
+	</param>
+	<param>
+		<index>10</index>
+		<element>item</element>
+		<elementType>Symbol</elementType>
+		<elementValue>Command to get name of environment (run in GW)</elementValue>
+	</param>
+	<param>
+		<index>10</index>
+		<element>setting</element>
+		<elementType>Symbol</elementType>
+		<elementValue>first pathSplitUp 1+where (pathSplitUp:("/" vs first system"pwd")) like "install"</elementValue>
+	</param>
+	<param>
+		<index>10</index>
+		<element>descriptionForUser</element>
+		<elementType>Symbol</elementType>
+		<elementValue>command that dynamically determins name/nicname of environment you are on and populates subject of emails.  runs verbatim (i.e. text here is simply valued, should return string though)</elementValue>
+	</param>
+	<param>
+		<index>11</index>
+		<element>item</element>
+		<elementType>Symbol</elementType>
+		<elementValue>Backup Cell for Full List Of Alerts</elementValue>
+	</param>
+	<param>
+		<index>11</index>
+		<element>setting</element>
+		<elementType>Symbol</elementType>
+		<elementValue>attemptToInsideTrade,baitAndSwitch,benchmarkManipulation,breakingTheMarket,fixingWindow,frontRunning,highOrderRate,inappStopLoss,insiderTrading,largeOrder,largeOrder,markingTheClose,markingTheClose,momentumIgnition,orderToTrade,paintingTheTape,parking,partialFills,phishing,phishing,pingOrders,pingOrders,preArrangedTrading,preAuctionSpoofing,pumpAndDump,smoking,spoofing,timeOrderPriority,unusualTradePriceMov,unusualTradePriceMov,unusualTradeVol,unusualTradeVol,washTrades</elementValue>
+	</param>
+	<param>
+		<index>11</index>
+		<element>descriptionForUser</element>
+		<elementType>Symbol</elementType>
+		<elementValue>unused cell to store full list of alerts for backup</elementValue>
+	</param>
+	<param>
+		<index>12</index>
+		<element>item</element>
+		<elementType>Symbol</elementType>
+		<elementValue>refineryHDBProc</elementValue>
+	</param>
+	<param>
+		<index>12</index>
+		<element>setting</element>
+		<elementType>Symbol</elementType>
+		<elementValue>emea_hdb_tr_transactionData_0_a</elementValue>
+	</param>
+	<param>
+		<index>12</index>
+		<element>descriptionForUser</element>
+		<elementType>Symbol</elementType>
+		<elementValue>HDB proc to query when writing down</elementValue>
+	</param>
+	<param>
+		<index>13</index>
+		<element>item</element>
+		<elementType>Symbol</elementType>
+		<elementValue>HDB Path Env Var</elementValue>
+	</param>
+	<param>
+		<index>13</index>
+		<element>setting</element>
+		<elementType>Symbol</elementType>
+		<elementValue>DAASDATA_HDBLOGDIR_ORDEREXEC</elementValue>
+	</param>
+	<param>
+		<index>13</index>
+		<element>descriptionForUser</element>
+		<elementType>Symbol</elementType>
+		<elementValue></elementValue>
+	</param>
+	<param>
+		<index>14</index>
+		<element>item</element>
+		<elementType>Symbol</elementType>
+		<elementValue>Config+Column with valid alert names</elementValue>
+	</param>
+	<param>
+		<index>14</index>
+		<element>setting</element>
+		<elementType>Symbol</elementType>
+		<elementValue>ALERT_TEST_RESULTS+alert</elementValue>
+	</param>
+	<param>
+		<index>14</index>
+		<element>descriptionForUser</element>
+		<elementType>Symbol</elementType>
+		<elementValue>name of config and column name with valid alerts for this system</elementValue>
+	</param>
+</configparam>

@@ -1,0 +1,59 @@
+<analytic>
+	<analytic>.test.importThresholdsFromCSV</analytic>
+	<code_text>{[filePath]
+	.debug.importThresholdsFromCSV:filePath;
+	filePath:string filePath;
+	.debug.importFilePath:filePath;
+	.log.out[.z.h;".test.importThresholdsFromCSV";"started for ",filePath];
+
+	unixConcatinatedCSV:system"cat ",filePath;
+	headers:`$","vs first unixConcatinatedCSV;
+	configToBePopulated:`$"_"sv 3#"_"vs last "/"vs filePath;
+	config:.uc.getActiveParamValue[configToBePopulated;`]; 
+	requiredMeta:([]c:headers;sequenceNumber:til[count[headers]])lj update thisColumnIsInConfig:1b from meta config;
+	columnsInCSVThatExistInConfig:exec c from requiredMeta where thisColumnIsInConfig;
+	columnPositionsInCSVThatExistInConfig:exec sequenceNumber from requiredMeta where thisColumnIsInConfig;
+	requiredCasts:exec t from {update t:"*" from x where t~'" "}update upper t from select from requiredMeta where thisColumnIsInConfig;	
+	acceptableDataFromCSV:{[csvRow;acceptablePositions;casts;colNames]
+		valsInThisRow:(","vs csvRow)[acceptablePositions];
+		intPositions:where casts in "HIJ";
+		boolPositions:where casts in "B";
+		colNames!casts$'@[@[valsInThisRow;intPositions;{first "."vs x}];boolPositions;{(("true";"TRUE";"false";"FALSE")!("1";"1";"0";"0"))x}]
+	}[;columnPositionsInCSVThatExistInConfig;requiredCasts;columnsInCSVThatExistInConfig]each 1_unixConcatinatedCSV;
+
+	/turn trader-&gt;traderID if trader not in order and execution tables
+	if[not 2=count[.ex.prh("select from .tbl.tablecolumn where table in `order`execution,column=`trader")];
+		acceptableDataFromCSV:update filters:(`$ssr[;"trader&lt;&gt;";"traderID&lt;&gt;"] each ssr[;"trader=";"traderID="] each string filters),entityLevel:(`$ssr[;"trader+";"traderID+"] each ssr[;"+trader";"+traderID"] each string entityLevel) from acceptableDataFromCSV
+	];
+
+	newConfig:(0#config) uj acceptableDataFromCSV;	
+	.uc.editActiveSingleParamData[configToBePopulated;`DEFAULT;newConfig];
+	
+	/using .uc.getActiveParamValue drops precision - do sanity check and update .uc.userconfig in DC process
+	unpreciseCols:raze distinct where each not newConfig=.uc.getActiveParamValue[configToBePopulated;`DEFAULT];
+	if[count unpreciseCols; 
+		unpreciseCols:?[newConfig;();0b;{x!x}raze where each not newConfig=.uc.getActiveParamValue[configToBePopulated;`DEFAULT]];
+		preciseColsDict:{$[(type first x) in (0h;0i;0j;10h);x;string x]}each flip unpreciseCols;
+		.uc.userConfigOverwrites:4!([]parameter:configToBePopulated;override:`DEFAULT;index:`int$raze count[cols[unpreciseCols]]# enlist til count unpreciseCols;element:raze count[unpreciseCols]#'key preciseColsDict;elementValue:raze value preciseColsDict);
+		.ex.prh({.uc.userconfig:.uc.userconfig lj x};.uc.userConfigOverwrites);
+	];
+ }</code_text>
+	<description></description>
+	<dictionaryparams>0</dictionaryparams>
+	<typ>Analytic</typ>
+	<private>0</private>
+	<returntype></returntype>
+	<returndata></returndata>
+	<defaultconnection></defaultconnection>
+	<alias></alias>
+	<analytictype>polling</analytictype>
+	<returndescription></returndescription>
+	<param>
+		<parameter>filePath</parameter>
+		<default></default>
+		<description>default parameter</description>
+		<required>1</required>
+		<datatype>Symbol</datatype>
+	</param>
+	<analyticgroup>kxSurveillanceAlertTests</analyticgroup>
+</analytic>

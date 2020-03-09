@@ -1,0 +1,17 @@
+instance,filters,entityLevel,alertFunction,volumeMeasure,volumeThreshold,benchmarkInstance,thresholdPercentageOver
+LO0: base case,instrumentID=LLOY.L|VOD.L;orderID=LO*,instrumentID,.alert.largeOrder,quantity,0,LO0: base case,0
+LO1: filters,instrumentID=LLOY.L|VOD.L|BARC.L;eventTimestamp=*D07:57*;orderID=LO*,instrumentID,.alert.largeOrder,quantity,2231451,LO1: filters,0
+LO2: entityLevel,instrumentID=LLOY.L|VOD.L|BARC.L;eventTimestamp=*D07:57*;orderID=LO*,instrumentID+eventType,.alert.largeOrder,quantity,0,LO2: entityLevel,0
+LO3: sampleTimePeriod,instrumentID=LLOY.L|VOD.L|BARC.L;eventTimestamp=*D07:57*;orderID=LO*,instrumentID,.alert.largeOrder,quantity,0,LO3: sampleTimePeriod,0
+LO4: timeBuckets,instrumentID=LLOY.L|VOD.L;orderID=LO*,instrumentID,.alert.largeOrder,quantity,0,LO4: timeBuckets,0
+LO5: minNoSamples,instrumentID=LLOY.L|VOD.L|BARC.L;orderID=LO*,instrumentID,.alert.largeOrder,quantity,2231451,LO5: minNoSamples,0
+LO6: winsorisation,instrumentID=LLOY.L|VOD.L|BARC.L;eventTimestamp=*D07:57*;orderID=LO*,instrumentID,.alert.largeOrder,quantity,0,LO6: winsorisation,0
+LO7: methodParameter,instrumentID=LLOY.L|VOD.L;orderID=LO*,instrumentID,.alert.largeOrder,quantity,0,LO7: methodParameter,0
+LO8A: method,instrumentID=LLOY.L|VOD.L|BARC.L;eventTimestamp=*D07:57*;orderID=LO*,instrumentID,.alert.largeOrder,quantity,0,LO8A: method,0
+LO8B: method,instrumentID=LLOY.L|VOD.L|BARC.L;eventTimestamp=*D07:57*;orderID=LO*,instrumentID,.alert.largeOrder,quantity,0,LO8B: method,0
+LO8C: method,instrumentID=LLOY.L|VOD.L|BARC.L;eventTimestamp=*D07:57*;orderID=LO*,instrumentID,.alert.largeOrder,quantity,0,LO8C: method,0
+LO8D: method,instrumentID=LLOY.L|VOD.L|BARC.L;eventTimestamp=*D07:57*;orderID=LO*,instrumentID,.alert.largeOrder,quantity,0,LO8D: method,0
+LO9: volumeMeasure,instrumentID=LLOY.L|VOD.L|BARC.L;eventTimestamp=*D07:57*;orderID=LO*,instrumentID,.alert.largeOrder,value,0,LO9: volumeMeasure,0
+LO10: default volume threshold,instrumentID=LLOY.L|VOD.L|BARC.L;orderID=LO*,instrumentID,.alert.largeOrder,quantity,1257575,LO10: default volume threshold,0
+LO11: no benchmarkInstance,instrumentID=LLOY.L|VOD.L;orderID=LO*,instrumentID,.alert.largeOrder,quantity,1257575,,0
+LO12: thresholdPercentageOver,instrumentID=LLOY.L|VOD.L;orderID=LO*,instrumentID,.alert.largeOrder,quantity,0,LO12: thresholdPercentageOver,0.2

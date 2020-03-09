@@ -1,0 +1,31 @@
+<analytic>
+	<analytic>.test.replaceEmptyValues</analytic>
+	<code_text>{[data]
+ 
+ //.debug.remove:`time`data!(.z.p;data);
+ 	if[not any (98,99)=type data; :data];
+  	emptyCols:exec c from (meta data) where t in "C ";
+ 	data:{[t;c] 
+ 			![t;enlist (=;0;(each;count;c));0b;enlist[c]!enlist (#;(count;`i);(enlist;""))]
+ 		}/[data;emptyCols]
+ 
+ }</code_text>
+	<description>Loads all the files needed for alert testing.</description>
+	<dictionaryparams>0</dictionaryparams>
+	<typ>Analytic</typ>
+	<private>0</private>
+	<returntype></returntype>
+	<returndata></returndata>
+	<defaultconnection></defaultconnection>
+	<alias></alias>
+	<analytictype>polling</analytictype>
+	<returndescription></returndescription>
+	<param>
+		<parameter>data</parameter>
+		<default></default>
+		<description>default parameter</description>
+		<required>1</required>
+		<datatype>Symbol</datatype>
+	</param>
+	<analyticgroup>kxSurveillanceAlertTests</analyticgroup>
+</analytic>

@@ -1,0 +1,15 @@
+instance,parent,priority,relatedAlert,filters,entityLevel,cancellationTimeInterval,minTradeCancellationQtyThreshold,tradeCancellationQtyPercentageThreshold,alertFunction,minIndividualTradeQtyThreshold,minIndividualTradeValThreshold,symGroupingEntityLevel,benchmarkManipulationAlertInstance
+FixingTest1,TRUE,999,FixingTest1,sourceData<>MUREX211_GDC,sym,00:10:00.000000000,140000,5.0,.alert.fixingWindow,0,0,disabled,WMReuters 4pm
+FixingTest2,TRUE,999,FixingTest2,sourceData<>MUREX211_GDC,sym+account,00:10:00.000000000,140000,5.0,.alert.fixingWindow,0,0,disabled,WMReuters 4pm
+FixingTest3,TRUE,999,FixingTest3,sourceData<>MUREX211_GDC,sym+traderID,00:10:00.000000000,140000,5.0,.alert.fixingWindow,0,0,disabled,WMReuters 4pm
+FixingTest4,TRUE,999,FixingTest4,assetClass=FX_OTC;sourceData<>MUREX211_GDC,sym,00:10:00.000000000,140000,5.0,.alert.fixingWindow,0,0,disabled,WMReuters 4pm
+FixingTest5,TRUE,999,FixingTest5,assetClass=COMM_OTC;sourceData<>MUREX211_GDC,sym,00:10:00.000000000,140000,5.0,.alert.fixingWindow,0,0,disabled,WMReuters 4pm
+FixingTest6,TRUE,999,FixingTest6,sourceData<>MUREX211_GDC,sym,00:00:01.000000000,140000,5.0,.alert.fixingWindow,0,0,disabled,WMReuters 4pm
+FixingTest7,TRUE,999,FixingTest7,sourceData<>MUREX211_GDC,sym,00:10:00.000000000,500000,5.0,.alert.fixingWindow,0,0,disabled,WMReuters 4pm
+FixingTest8,TRUE,999,FixingTest8,sourceData<>MUREX211_GDC,sym,00:10:00.000000000,140000,65.0,.alert.fixingWindow,0,0,disabled,WMReuters 4pm
+FixingTest9,TRUE,999,FixingTest9,sourceData<>MUREX211_GDC,sym+brokerID,00:10:00.000000000,140000,5.0,.alert.fixingWindow,0,0,disabled,WMReuters 4pm
+FixingTest10,TRUE,999,FixingTest10,sourceData<>MUREX211_GDC,sym+brokerID,00:10:00.000000000,140000,5.0,.alert.fixingWindow,55000,75000,disabled,WMReuters 4pm
+FixingTest10a - Child - Triggers,FALSE,1,FixingTest10,sourceData<>MUREX211_GDC,sym+brokerID,00:10:00.000000000,140000,5.0,.alert.fixingWindow,55000,75000,disabled,WMReuters 4pm
+FixingTest10b - Child - Does Not Trigger,FALSE,2,FixingTest10,sourceData<>MUREX211_GDC,sym+brokerID,00:10:00.000000000,140000,5.0,.alert.fixingWindow,55000,75000,disabled,WMReuters 4pm
+FixingTest11: Alert does not trigger if no trades above minQty,TRUE,999,FixingTest11: Alert does not trigger if no trades above minQty,sourceData<>MUREX211_GDC,sym+brokerID,00:10:00.000000000,140000,5.0,.alert.fixingWindow,300000,0,disabled,WMReuters 4pm
+FixingTest12: Alert does not trigger if no trades above minVal,TRUE,999,FixingTest12: Alert does not trigger if no trades above minVal,sourceData<>MUREX211_GDC,sym+brokerID,00:10:00.000000000,140000,5.0,.alert.fixingWindow,0,30000000,disabled,WMReuters 4pm

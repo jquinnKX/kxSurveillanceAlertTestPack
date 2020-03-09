@@ -1,0 +1,53 @@
+<analytic>
+	<analytic>.test.testAllAlertsRETRY</analytic>
+	<code_text>{[ingestData;runAlerts;emails;version;onlyTestTheseAlerts]
+	.[.test.testAllAlerts;(ingestData;runAlerts;emails;version;onlyTestTheseAlerts);{.log.err[.z.h;".test.testAllAlertsRETRY had error: ";x];.test.sendErrorEmail[x]}];
+	:()
+ }</code_text>
+	<description>Checks for referencedata, ingests alert test data, and then runs benchmarks and alerts.</description>
+	<dictionaryparams>0</dictionaryparams>
+	<typ>Analytic</typ>
+	<private>0</private>
+	<returntype></returntype>
+	<returndata></returndata>
+	<defaultconnection></defaultconnection>
+	<alias></alias>
+	<analytictype>polling</analytictype>
+	<returndescription></returndescription>
+	<param>
+		<parameter>ingestData</parameter>
+		<default>false</default>
+		<description>If true, the report will ingest data.</description>
+		<required>1</required>
+		<datatype>Boolean</datatype>
+	</param>
+	<param>
+		<parameter>runAlerts</parameter>
+		<default>false</default>
+		<description>default parameter</description>
+		<required>1</required>
+		<datatype>Boolean</datatype>
+	</param>
+	<param>
+		<parameter>emails</parameter>
+		<default></default>
+		<description>default parameter</description>
+		<required>1</required>
+		<datatype>Symbol</datatype>
+	</param>
+	<param>
+		<parameter>version</parameter>
+		<default></default>
+		<description>default parameter</description>
+		<required>1</required>
+		<datatype>Symbol</datatype>
+	</param>
+	<param>
+		<parameter>onlyTestTheseAlerts</parameter>
+		<default></default>
+		<description>default parameter</description>
+		<required>1</required>
+		<datatype>Symbol</datatype>
+	</param>
+	<analyticgroup>kxSurveillanceAlertTests</analyticgroup>
+</analytic>

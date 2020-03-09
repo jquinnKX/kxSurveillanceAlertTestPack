@@ -1,0 +1,12 @@
+instance,filters,entityLevel,alertFunction,thresholdOrderValue,hedgingProfitThreshold,slippagePercentageThreshold,fillAndTradeReversalTimeInterval,thresholdTradeReversalPriceMovPercent,thresholdStopLossPricePercentage
+scenario2: Alert triggers - verify calcs,venue=GCBOX,sym+account,.alert.inappStopLoss,500000.0,1500.0,0.3,00:00:50.000000000,0.5,0.4
+scenario2: entity level didn't trade between entry and fill time,venue=GCBOX,sym+traderID,.alert.inappStopLoss,500000.0,1500.0,0.3,00:00:50.000000000,0.5,0.4
+scenario2: orderValueThreshold too high,venue=GCBOX,sym+account,.alert.inappStopLoss,503250.0,1500.0,0.3,00:00:50.000000000,0.5,0.4
+scenario2: hedgingProfitThreshold too high,venue=GCBOX,sym+account,.alert.inappStopLoss,500000.0,1632.9114,0.3,00:00:50.000000000,0.5,0.4
+scenario2: slippagePercentageThreshold too high,venue=GCBOX,sym+account,.alert.inappStopLoss,500000.0,1500.0,0.3466,00:00:50.000000000,0.5,0.4
+scenario2: test case client order not filled in time interval,venue=GCBOX,sym+account,.alert.inappStopLoss,500000.0,1500.0,0.3,00:00:49.999000000,0.5,0.4
+scenario2: tradeReversalPriceMovPercentage too high,venue=GCBOX,sym+account,.alert.inappStopLoss,500000.0,1500.0,0.3,00:00:50.000000000,0.5926,0.4
+scenario2: stopPriceDiffPercentage too low,venue=GCBOX,sym+account,.alert.inappStopLoss,500000.0,1500.0,0.3,00:00:50.000000000,0.5,0.399
+scenario1: Alert triggers for client order partially filled,,sym+traderID,.alert.inappStopLoss,50000.0,1000.0,0.4,00:03:00.000000000,1.4,0.3
+scenario1: Alert triggers for both client order partial filll and fill seperately,,sym+traderID,.alert.inappStopLoss,50000.0,900.0,0.4,00:03:00.000000000,1.4,0.3
+scenario1: Negative test for filter,assetClass=FX_OTC,sym+traderID,.alert.inappStopLoss,50000.0,900.0,0.4,00:03:00.000000000,1.4,0.3

@@ -1,0 +1,168 @@
+<analytic>
+	<analytic>.test.writeDownTRDataScopeFile</analytic>
+	<code_text>{[filePath]
+	.debug.writeDownTRDataScopeFile:filePath;
+	
+	/get path of hdb
+	.test.getSettingForItem:{string exec first setting from .uc.getActiveParamValue[`ALERT_TEST_SETTINGS;`] where item=x};
+	HDBPathEnvVar:.test.getSettingForItem`$"HDB Path Env Var";
+	.test.hdbpath:hsym `$getenv`$HDBPathEnvVar;
+	if[null .test.hdbpath;'"Can't determine HDB path"];
+	HDB:@[.pl.gethostport;;{.log.error[.z.h;"Error getting port for Report Generator";x];:()}] .test.hdbProc:`$.test.getSettingForItem`$"refineryHDBProc"; 
+	.log.out[.z.h;".test.writeDownTRDataScopeFile";"Connecting to HDB"];
+	.test.HDBHandle: {.utils.dcc[x;0;{[x;y].pl.report_error_addInfo["Unable to open ",(string x);y];`err}[x]]} HDB;	
+	
+	filePath:string filePath;
+	
+	.log.out[.z.h;".test.writeDownTRDataScopeFile";"started for ",filePath];
+	
+	headers:`$","vs first system"gzip -cd ",filePath,"|head -n 1";
+	if[not all $[`;("#RIC";"Date-Time")] in headers;.test.exitWriteDownAlertTestFile[filePath;"No eventTimestamp and/or instrumentID column in csv"];:()];
+
+	//run with CTRL+ALT+ENTER in Eclipse UI
+	unixConcatinatedCSV:$["csv.gz"~-6#filePath;
+		[
+			.log.out[.z.h;".test.writeDownTRDataScopeFile";"kzcatting file"];
+			kzcat:`kzcat 2:(`kzcat;1);
+			kzcat `$filePath
+		];
+		[
+			.log.out[.z.h;".test.writeDownTRDataScopeFile";"catting file"];
+			system"cat ",filePath
+		]
+	];
+	
+	unixConcatinatedCSV[0]:ssr[unixConcatinatedCSV[0];"Ex/Cntrb.ID";"ExCntrbID"];
+	headers:{x[where x=`$"Ex/Cntrb.ID"]:`ExCntrbID;x}headers;
+	
+	.log.out[.z.h;".test.writeDownTRDataScopeFile";"counting RICS"];
+	RICValueEndPoints:?[;","]each unixConcatinatedCSV; 
+	RICValues:RICValueEndPoints#'unixConcatinatedCSV;
+	RICValuesRows:group RICValues;
+	rowCountsPerRIC:desc count each RICValuesRows; 
+	RICSWithTooManyRows:key[rowCountsPerRIC] where value[rowCountsPerRIC]&gt;100000;
+	.log.out[.z.h;".test.writeDownTRDataScopeFile";"capping number of rows for RICS: ",", " sv RICSWithTooManyRows];
+	RICValuesRows[RICSWithTooManyRows]:100000#'RICValuesRows[RICSWithTooManyRows];
+	unixConcatinatedCSV:unixConcatinatedCSV[asc raze[value[RICValuesRows]]];
+	
+	/unixConcatinatedCSV:headers!/:","vs/:unixConcatinatedCSV;
+	.log.out[.z.h;".test.writeDownTRDataScopeFile";"0: file"];
+	unixConcatinatedCSV:({x[5]:"S";x}count[headers]#enlist["*"];enlist[","])0: unixConcatinatedCSV;
+		
+	executionsSelectDict:{x[;0]!x[;1]}2 cut(
+		`instrumentID;($;enlist`;`$"#RIC");
+		`underlying;($;enlist`;`$"Alias Underlying RIC");
+		`eventTimestamp;($;"P";`$"Date-Time");
+		`eventType;enlist[`new];
+		`venue;($;enlist`;`$"ExCntrbID");
+		`price;($;"F";`$"Price");
+		`quantity;($;"F";`$"Volume");
+		`strikePrice;($;"F";`$"Strike");
+		`referencePrice;($;"F";`$"Reference Price");
+		`currency;($;"S";`$"Trade Price Currency");
+		`tradeCapacity;($;"S";`$"Categorisation of Trades")
+	);
+	
+	.log.out[.z.h;".test.writeDownTRDataScopeFile";"Constructing Executions"];
+	executions:update executionID:(((last "/"vs filePath),"_tid"),/:string[i]),sourceSystemID:`$(last "/"vs filePath) from ?[unixConcatinatedCSV;enlist(=;`Type;enlist`Trade);0b;executionsSelectDict];
+	executions:select from executions where not or[null price;null quantity];
+
+	ordersSelectDict:{x[;0]!x[;1]}2 cut(
+		`instrumentID;($;enlist`;`$"#RIC");
+		`underlying;($;enlist`;`$"Alias Underlying RIC");
+		`eventTimestamp;($;"P";`$"Date-Time");
+		`eventType;enlist[`new];
+		`venue;($;enlist`;`$"ExCntrbID");
+		`bidPrice;($;"F";`$"Bid Price");
+		`askPrice;($;"F";`$"Ask Price");
+		`bidQuantity;($;"F";`$"Bid Size");
+		`askQuantity;($;"F";`$"Ask Size")
+	);
+	
+	.log.out[.z.h;".test.writeDownTRDataScopeFile";"Constructing Orders"];
+	orders:distinct update sourceSystemID:`$(last "/"vs filePath) from ?[unixConcatinatedCSV;enlist(=;`Type;enlist`Quote);0b;ordersSelectDict];
+	orders:distinct delete bidPrice,askPrice,bidQuantity,askQuantity from `eventTimestamp xasc (update side:`B,price:bidPrice,quantity:bidQuantity from select from orders where not null bidPrice),(update side:`S,price:askPrice,quantity:askQuantity from select from orders where not null askPrice); 
+	orders:update orderID:(((last "/"vs filePath),"_oid"),/:string[i]),sourceSystemID:`$(last "/"vs filePath) from orders;
+	orders:select from orders where not or[null price;null quantity];
+
+	{
+		
+		baseTableName:tableToBePopulated:x[1];
+		.log.out[.z.h;".test.writeDownTRDataScopeFile";"Start Prep to Write-Down ",string[baseTableName]];
+		acceptableDataFromCSV:x[0];
+		filePath:y;
+		
+		/check if nested lists
+		listSchema:{select from x where coltype like "*[[]]*"}.ex.prh({select from .tbl.tablecolumn where table=x};baseTableName);
+		if[count listSchema;
+			listCastDict:(`$("Symbol[]";"Short[]";"Int[]";"Long[]";"Float[]";"Date[]";"Timestamp[]"))!("\"S\"";"\"H\"";"\"I\"";"\"J\"";"\"F\"";"\"D\"";"\"P\"");
+			updateClauses:","sv exec ((string[column],\:":"),'((listCastDict[coltype],\:("$'\" \"vs/:")),'string column)) from listSchema;
+			updateStatement:"update ",updateClauses," from .tmp.acceptableDataFromCSV";
+			.tmp.acceptableDataFromCSV:acceptableDataFromCSV;
+			acceptableDataFromCSV:eval parse[updateStatement]; 
+		];
+		acceptableDataFromCSV:update date:`date$eventTimestamp from acceptableDataFromCSV; 
+		distinctDatesToWriteTo:exec distinct date from acceptableDataFromCSV;
+	
+		{[tableToBePopulated;baseTableName;acceptableDataFromCSV;filePath;thisDate]
+			.debug.writeDownInnerFunc:(`tableToBePopulated`baseTableName`acceptableDataFromCSV`filePath`thisDate)!(tableToBePopulated;baseTableName;acceptableDataFromCSV;filePath;thisDate);
+			.tbl.gettable[baseTableName];
+			colsOfTable:cols[baseTableName];
+			.test.getExistingDataForThisDate:{[tableToBePopulated;thisDate]
+				(``date)_.test.HDBHandle({[t;d]select from t where date=d};tableToBePopulated;thisDate)
+			};
+			
+			existingDataForThisDate:.[.test.getExistingDataForThisDate;(tableToBePopulated;thisDate);(``date)_0#acceptableDataFromCSV];
+			.log.out[.z.h;".test.writeDownTRDataScopeFile";"Existing Data in ",string[tableToBePopulated]," for ",string[thisDate]," has count ",string[count existingDataForThisDate]]; 
+			
+			/there is overlapping test data for different alerts (e.g. largeOrder uses Marking The Close test data).  Do not ingest if sourceConnection already present
+			$[`sourceConnection in cols existingDataForThisDate;
+				[
+					existingSourceConnectionsForThisDate:exec distinct sourceConnection from existingDataForThisDate;
+					acceptableDataFromCSV:select from acceptableDataFromCSV where date=thisDate,not sourceConnection in existingSourceConnectionsForThisDate;
+				];
+					existingDataForThisDate:0#existingDataForThisDate
+			];
+			if[not count acceptableDataFromCSV;
+				.log.out[.z.h;".test.writeDownTRDataScopeFile";"Nothing new to write down from ",filePath];
+				:()
+			];
+			sortColumns::$[`eventTimestamp in cols[baseTableName];
+				`instrumentID`eventTimestamp;
+				enlist`instrumentID
+			]; 		
+			tableToBePopulated set sortColumns xasc get tableToBePopulated upsert .test.replaceEmptyValues get[baseTableName] uj #[cols[tableToBePopulated]inter cols[acceptableDataFromCSV];] existingDataForThisDate uj (``date)_select from acceptableDataFromCSV where date=thisDate;
+			.log.out[.z.h;".test.writeDownTRDataScopeFile";"About to write-down"];
+			.debug.res:(` sv .Q.par[.test.hdbpath;thisDate;tableToBePopulated],`) set .Q.en[.test.hdbpath] colsOfTable#update recvTime:.z.p from get[tableToBePopulated];
+			.log.out[.z.h;".test.writeDownTRDataScopeFile";"Write-down result is ",string .debug.res]; 
+			delete from tableToBePopulated; 
+			.Q.chk[.test.hdbpath];
+			/.dataloader.reloadHDB[`;`];
+			.test.HDBHandle({system"l ."};`);
+			
+		}[tableToBePopulated;baseTableName;acceptableDataFromCSV;filePath;]each distinctDatesToWriteTo;
+		
+	}[;filePath] each ((executions;`execution);(orders;`order)); 
+
+	.log.out[.z.h;".test.writeDownTRDataScopeFile";"DONE"];
+
+ }</code_text>
+	<description></description>
+	<dictionaryparams>0</dictionaryparams>
+	<typ>Analytic</typ>
+	<private>0</private>
+	<returntype></returntype>
+	<returndata></returndata>
+	<defaultconnection></defaultconnection>
+	<alias></alias>
+	<analytictype>polling</analytictype>
+	<returndescription></returndescription>
+	<param>
+		<parameter>filePath</parameter>
+		<default></default>
+		<description>default parameter</description>
+		<required>1</required>
+		<datatype>Symbol</datatype>
+	</param>
+	<analyticgroup>kxSurveillanceAlertTests</analyticgroup>
+</analytic>

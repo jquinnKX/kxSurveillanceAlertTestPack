@@ -1,0 +1,17 @@
+<analytic>
+	<analytic>.test.loadTestFilesWrapper</analytic>
+	<code_text>{[]
+	@[.test.loadTestFiles;();{.log.err[.z.h;".test.loadTestFiles had error: ";x];.test.sendErrorEmail[x]}]
+}</code_text>
+	<description>Loads all the files needed for alert testing.</description>
+	<dictionaryparams>0</dictionaryparams>
+	<typ>Analytic</typ>
+	<private>0</private>
+	<returntype></returntype>
+	<returndata></returndata>
+	<defaultconnection></defaultconnection>
+	<alias></alias>
+	<analytictype>polling</analytictype>
+	<returndescription></returndescription>
+	<analyticgroup>kxSurveillanceAlertTests</analyticgroup>
+</analytic>
